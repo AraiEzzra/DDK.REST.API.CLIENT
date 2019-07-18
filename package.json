@@ -1,0 +1,36 @@
+{
+  "name": "ddk.rest.api.client",
+  "version": "1.0.0",
+  "description": "DDK.REST.API.CLIENT",
+  "main": "src/index.ts",
+  "scripts": {
+    "watch": "webpack --watch",
+    "nodemon": "nodemon \"./dist/bundle.js\"",
+    "start": "npm run watch & npm run nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AraiEzzra/DDK.REST.API.CLIENT.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AraiEzzra/DDK.REST.API.CLIENT/issues"
+  },
+  "homepage": "https://github.com/AraiEzzra/DDK.REST.API.CLIENT#readme",
+  "dependencies": {
+    "ddk.registry": "git+https://github.com/AraiEzzra/DDK.REGISTRY.git",
+    "express": "^4.17.1",
+    "socket.io-client": "^2.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^12.6.1",
+    "@types/socket.io-client": "^1.4.32",
+    "nodemon": "^1.19.1",
+    "ts-loader": "^6.0.4",
+    "tslint": "^5.18.0",
+    "typescript": "^3.5.3",
+    "webpack": "^4.35.3",
+    "webpack-cli": "^3.3.5"
+  }
+}

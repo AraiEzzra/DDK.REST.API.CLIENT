@@ -1,0 +1,46 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "outDir": "build",
+        "rootDir": "src",
+        "moduleResolution": "node",
+        "module": "commonjs",
+        "declaration": true,
+        "inlineSourceMap": true,
+        "esModuleInterop": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "traceResolution": false,
+        "listEmittedFiles": false,
+        "listFiles": false,
+        "pretty": true,
+        "lib": [
+            "es2017",
+            "esnext",
+            "es6"
+        ],
+        "baseUrl": ".",
+        "paths": {
+            "*": [
+                "./*"
+            ]
+        },
+        "types": [
+            "node"
+        ],
+        "typeRoots": [
+            "node_modules/@types"
+        ]
+    },
+    "include": [
+        "src/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules/**",
+        "dist/**",
+        "build/**"
+    ],
+    "compileOnSave": false
+}
