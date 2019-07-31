@@ -6,6 +6,7 @@
         "moduleResolution": "node",
         "module": "commonjs",
         "declaration": true,
+        "experimentalDecorators": true,
         "inlineSourceMap": true,
         "esModuleInterop": true,
         "noUnusedLocals": true,

@@ -4,4 +4,6 @@ import { transactionController } from 'src/controller/transaction';
 
 export const transactionRouter = express.Router();
 
-transactionRouter.get('/:id', transactionController.get);
+transactionRouter.get('/', transactionController.getMany);
+transactionRouter.get('/:id', transactionController.getById);
+transactionRouter.post('/', transactionController.create);

@@ -1,14 +1,14 @@
 import { ResponseEntity } from 'ddk.registry/dist/model/responseEntity';
+import Message, { MessageType } from 'ddk.registry/dist/model/transport/message';
 
-import { DEFAULT_SOCKET_TIMEOUT } from 'src/const';
-import Message, { MessageType } from 'src/shared/message';
+import { DEFAULT_SOCKET_TIMEOUT, DEFAULT_SOCKET_EVENT } from 'src/const';
 
-interface IEmitter {
+export interface IEmitter {
     on(event: string, fn: Function): IEmitter;
     emit<T>(event: string, ...args: Array<T>): IEmitter;
 }
 
-interface ISocketClient<Code = string, Socket = WebSocket> extends IEmitter {
+export interface ISocketClient<Code = string, Socket = WebSocket> extends IEmitter {
     send<Data, Response>(code: Code, data: Data): Promise<ResponseEntity<Response>>;
     getSocket(): Socket;
 }
@@ -19,7 +19,7 @@ export class SocketClient<T extends IEmitter, ActionTypes> implements ISocketCli
     private readonly timeout: number;
     private readonly event: string;
 
-    constructor(socket: T, event: string = 'message', timeout: number = DEFAULT_SOCKET_TIMEOUT) {
+    constructor(socket: T, event: string = DEFAULT_SOCKET_EVENT, timeout: number = DEFAULT_SOCKET_TIMEOUT) {
         this.socket = socket;
         this.event = event;
         this.listeners = new Map<string, (value?: any | PromiseLike<any>) => void>();
