@@ -1,9 +1,15 @@
-import Validator from 'z-schema';
 import { Request, Response } from 'express';
+import Validator from 'ddk.registry/dist/util/validate';
 
-import { validator } from 'src/shared/validate/zSchema';
 import { getTransactionByIdScheme, getTransactionsScheme } from 'src/util/validate/transaction';
 import { createTransactionScheme } from 'src/util/validate/schema/transaction';
+
+const validator: Validator = new Validator({
+    noTypeless: true,
+    noExtraKeywords: true,
+    noEmptyArrays: true,
+    noEmptyStrings: true,
+});
 
 const isValidSchema: boolean = validator.validateSchema([
     createTransactionScheme,
