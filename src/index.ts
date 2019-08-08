@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 
 import 'src/config';
+import 'src/service';
 import { transactionRouter } from 'src/router/transaction';
 
 const app = express();

@@ -1,10 +1,10 @@
-export const HTTP_PAGINATION_SCHEME = {
+export const PAGINATION_SCHEME = {
     limit: {
-        type: 'string',
+        type: 'number',
         format: 'limit',
     },
     offset: {
-        type: 'string',
+        type: 'number',
         format: 'offset',
     },
 };
