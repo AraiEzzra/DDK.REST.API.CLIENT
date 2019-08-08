@@ -4,6 +4,8 @@ import { transactionCreator } from 'ddk.registry/dist/service/transaction';
 import { TransactionData } from 'ddk.registry/dist/model/common/type';
 import { Transaction } from 'ddk.registry/dist/model/common/transaction';
 import { transactionSerializer } from 'ddk.registry/dist/util/serialize/transaction';
+import { Account } from 'ddk.registry/dist/model/common/account';
+import { TransactionType } from 'ddk.registry/dist/model/common/transaction/type';
 
 import { socketClient } from 'src/socket';
 import { validate } from 'src/util/validate';
@@ -36,12 +38,21 @@ export class TransactionController {
             asset: req.body.transaction.asset,
         };
 
-        let accountResponse = await fetchAccountBySecret(req.body.secret);
-        if (!accountResponse.success) {
-            return res.send(accountResponse);
+        let sender: Account;
+        switch (transactionData.type) {
+            case TransactionType.STAKE:
+            case TransactionType.VOTE:
+                let accountResponse = await fetchAccountBySecret(req.body.secret);
+                if (!accountResponse.success) {
+                    return res.send(accountResponse);
+                }
+
+                sender = accountResponse.data;
+                break;
+            default:
+                break;
         }
 
-        const sender = accountResponse.data;
         const assetResponse = await calculateAsset(transactionData, sender);
         if (!assetResponse.success) {
             res.send(assetResponse);
