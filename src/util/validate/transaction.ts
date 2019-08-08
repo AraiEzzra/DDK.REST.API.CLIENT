@@ -1,4 +1,4 @@
-import { PAGINATION_SCHEME } from 'src/shared/validate/common';
+import { PAGINATION_SCHEME } from 'ddk.registry/dist/util/validate/scheme/filter';
 
 export const getTransactionByIdScheme = {
     id: 'GET /api/transactions/:id',
