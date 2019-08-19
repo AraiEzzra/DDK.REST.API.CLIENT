@@ -10,7 +10,7 @@ export interface IEmitter {
 
 export interface ISocketClient<Code = string, Socket = WebSocket> extends IEmitter {
     send<Data, Response>(code: Code, data: Data): Promise<ResponseEntity<Response>>;
-    onCode(code: Code, fn: Function): void;
+    addCodeListener(code: Code, fn: Function): void;
     getSocket(): Socket;
 }
 
@@ -71,7 +71,7 @@ export class SocketClient<T extends IEmitter, ActionTypes> implements ISocketCli
         return this.socket;
     }
 
-    onCode(code: ActionTypes, fn: Function): void {
+    addCodeListener(code: ActionTypes, fn: Function): void {
         if (!this.codeListeners.has(code)) {
             this.codeListeners.set(code, []);
         }

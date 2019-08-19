@@ -16,7 +16,7 @@ export class BlockchainInfoService {
 
         // TODO: fetch blockchain info when API will be added to core
 
-        socketClient.onCode(EVENT_TYPES.UPDATE_BLOCKCHAIN_INFO, this.onUpdateBlockchainInfo);
+        socketClient.addCodeListener(EVENT_TYPES.UPDATE_BLOCKCHAIN_INFO, this.onUpdateBlockchainInfo);
     }
 
     private onUpdateBlockchainInfo = (info: BlockchainInfoSchema): void => {

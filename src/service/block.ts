@@ -14,7 +14,7 @@ export class BlockService {
     ) {
         this.blockRepository = blockRepository;
 
-        socketClient.onCode(EVENT_TYPES.APPLY_BLOCK, this.onApplyBlock);
+        socketClient.addCodeListener(EVENT_TYPES.APPLY_BLOCK, this.onApplyBlock);
     }
 
     private onApplyBlock = (block: BlockSchema): void => {
