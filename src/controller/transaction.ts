@@ -10,7 +10,7 @@ import { TransactionType } from 'ddk.registry/dist/model/common/transaction/type
 import { socketClient } from 'src/socket';
 import { validate } from 'src/util/validate';
 import { calculateAsset } from 'src/service/transaction';
-import { fetchAccountBySecret } from 'src/service/account';
+import { accountService } from 'src/service';
 
 export class TransactionController {
     @validate
@@ -42,7 +42,7 @@ export class TransactionController {
         switch (transactionData.type) {
             case TransactionType.STAKE:
             case TransactionType.VOTE:
-                let accountResponse = await fetchAccountBySecret(req.body.secret);
+                let accountResponse = await accountService.fetchBySecret(req.body.secret);
                 if (!accountResponse.success) {
                     return res.send(accountResponse);
                 }
