@@ -7,7 +7,7 @@ import { transactionSerializer } from 'ddk.registry/dist/util/serialize/transact
 import { Account } from 'ddk.registry/dist/model/common/account';
 import { TransactionType } from 'ddk.registry/dist/model/common/transaction/type';
 
-import { socketClient } from 'src/socket';
+import { socketClient } from 'src/service/socket';
 import { validate } from 'src/util/validate';
 import { calculateAsset } from 'src/service/transaction';
 import { accountService } from 'src/service';
