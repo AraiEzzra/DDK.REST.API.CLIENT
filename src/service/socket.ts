@@ -9,6 +9,7 @@ import { SocketClient } from 'src/shared/socket';
 import { webhookService } from 'src/service';
 import { WebhookAction } from 'src/service/webhook';
 import { NODE_API_PORT, NODE_HOST } from 'src/config';
+import { Transaction } from 'ddk.registry/dist/model/common/transaction';
 
 const initSocketIOClient = (ip: string, port: number): SocketIOClient.Socket => {
     const protocol = port === DEFAULT_SSL_PORT ? 'wss' : 'ws';
@@ -25,9 +26,13 @@ export const socketClient = new SocketClient<SocketIOClient.Socket, API_ACTION_T
 socketClient.addCodeListener(EVENT_TYPES.APPLY_BLOCK, (block: Block) => {
     console.log(`APPLY BLOCK EVENT: ${JSON.stringify(block)}`);
 
-    webhookService.on(WebhookAction.APPLY_BLOCK, block);
+    webhookService.on(EVENT_TYPES.APPLY_BLOCK, block);
 
     block.transactions.forEach(transaction => {
         webhookService.on(WebhookAction.APPLY_TRANSACTION, transaction);
     });
+});
+
+socketClient.addCodeListener(EVENT_TYPES.DECLINE_TRANSACTION, (transaction: Transaction<any>) => {
+    webhookService.on(EVENT_TYPES.DECLINE_TRANSACTION, transaction);
 });

@@ -1,8 +1,7 @@
 import fetch from 'node-fetch';
 
 export enum WebhookAction {
-    APPLY_TRANSACTION,
-    APPLY_BLOCK,
+    APPLY_TRANSACTION = 'APPLY_TRANSACTION',
 }
 
 export class WebhookService<Action> {
