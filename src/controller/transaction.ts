@@ -63,6 +63,7 @@ export class TransactionController {
             data: transactionData,
             sender,
             secret: req.body.secret,
+            secondSecret: req.body.secondSecret,
         });
 
         if (!transactionResponse.success) {
