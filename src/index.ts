@@ -13,5 +13,5 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/api/transactions', transactionRouter);
 
 app.listen(process.env.SERVER_PORT, () => {
-    console.log(`DDK RestAPI listening on port ${process.env.SERVER_PORT}!`);
+    console.log(`[APP][RestAPI] Listening on port ${process.env.SERVER_PORT}!`);
 });

@@ -5,7 +5,7 @@ import { Account } from 'ddk.registry/dist/model/common/account';
 import { ResponseEntity } from 'ddk.registry/dist/model/common/responseEntity';
 import { SerializedAccount, Address, PublicKey } from 'ddk.registry/dist/model/common/type';
 
-import { socketClient } from 'src/socket';
+import { socketClient } from 'src/service/socket';
 
 export class AccountService {
     async fetchByAddress(address: Address): Promise<ResponseEntity<Account>> {
