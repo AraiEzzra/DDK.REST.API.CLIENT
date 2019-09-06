@@ -1,11 +1,13 @@
 import { Request, Response } from 'express';
 import { API_ACTION_TYPES } from 'ddk.registry/dist/model/transport/code';
+import { slotService } from 'ddk.registry/dist/service/slot';
 import { transactionCreator } from 'ddk.registry/dist/service/transaction';
 import { TransactionData } from 'ddk.registry/dist/model/common/type';
 import { Transaction } from 'ddk.registry/dist/model/common/transaction';
 import { transactionSerializer } from 'ddk.registry/dist/util/serialize/transaction';
 import { Account } from 'ddk.registry/dist/model/common/account';
 import { TransactionType } from 'ddk.registry/dist/model/common/transaction/type';
+import TimeServiceClient from 'eska-common/dist/time_service';
 
 import { socketClient } from 'src/service/socket';
 import { validate } from 'src/util/validate';
@@ -33,8 +35,12 @@ export class TransactionController {
 
     @validate
     async create(req: Request, res: Response): Promise<Response> {
+        const currentTime = await TimeServiceClient.getTime();
+        const epochTime = slotService.getTime(currentTime);
+
         const transactionData: TransactionData = {
             ...req.body.transaction,
+            createdAt: epochTime,
             asset: req.body.transaction.asset,
         };
 
