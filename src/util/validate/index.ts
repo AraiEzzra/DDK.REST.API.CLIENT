@@ -22,8 +22,6 @@ export const validate = (_target: any, _propertyName: string, descriptor: Proper
     return {
         value: (req: Request, res: Response): any => {
             const schemaId = `${req.method} ${req.baseUrl}${req.route.path}`;
-            console.log(`schemaId`, schemaId);
-
             const data = { ...req.params, ...req.query, ...req.body };
 
             validator.validate(data, schemaId, (errors: Array<Validator.SchemaError>, isValid: boolean) => {
