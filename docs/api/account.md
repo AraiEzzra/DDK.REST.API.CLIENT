@@ -16,10 +16,10 @@ URL parameters
 
 Response
 
-| Parameter | Type    | Description       |
-|-----------|---------|-------------------|
-| success   | boolean | Operation status  |
-| data      | Account | Requested account |
+| Parameter | Type                                                                                   | Description       |
+|-----------|----------------------------------------------------------------------------------------|-------------------|
+| success   | boolean                                                                                | Operation status  |
+| data      | [Account](https://github.com/AraiEzzra/DDKCORE/blob/master/docs/api/models.md#account) | Requested account |
 
 ### GET ACCOUNT EXAMPLES
 

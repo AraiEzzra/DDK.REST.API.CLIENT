@@ -14,14 +14,14 @@ Body parameters
 |--------------|------------------------------------------------|-------------|-----------------------|
 | secret       | string                                         | +           | Account secret        |
 | secondSecret | string                                         | -           | Account second secret |
-| transaction  | [Transaction Data](models.md#transaction-data) | +           | Transaction data      |
+| transaction  | [Transaction Data](../model.md#transaction-data) | +           | Transaction data      |
 
 Response
 
 | Parameter | Type        | Description         |
 |-----------|-------------|---------------------|
 | success   | boolean     | Operation status    |
-| data      | Transaction | Created transaction |
+| data      | [Transaction](https://github.com/AraiEzzra/DDKCORE/blob/master/docs/api/models.md#transaction) | Created transaction |
 
 ### Examples
 
@@ -92,7 +92,7 @@ Response
 | Parameter | Type        | Description           |
 |-----------|-------------|-----------------------|
 | success   | boolean     | Operation status      |
-| data      | Transaction | Requested transaction |
+| data      | [Transaction](https://github.com/AraiEzzra/DDKCORE/blob/master/docs/api/models.md#transaction) | Requested transaction |
 
 ### GET TRANSACTION EXAMPLES
 
@@ -144,8 +144,8 @@ Body parameters
 
 | Parameter | Type                                            | Is Required | Description                |
 |-----------|-------------------------------------------------|-------------|----------------------------|
-| filter    | [Transaction Type](models.md#transaction-types) | -           | Filter by transaction type |
-| sort      | array<[Sort](models.md#sort)>                   | -           | Sort                       |
+| filter    | [Transaction Type](https://github.com/AraiEzzra/DDKCORE/blob/master/docs/api/models.md#transaction-types) | -           | Filter by transaction type |
+| sort      | array<[Sort](../model.md#sort)>                   | -           | Sort                       |
 | limit     | number                                          | +           | Limit                      |
 | offset    | number                                          | +           | Offset                     |
 
@@ -154,7 +154,7 @@ Response
 | Parameter         | Type                                        | Description                            |
 |-------------------|---------------------------------------------|----------------------------------------|
 | success           | boolean                                     | Operation status                       |
-| data.transactions | array<[Transaction](models.md#transaction)> | Transactions                           |
+| data.transactions | array<[Transaction](https://github.com/AraiEzzra/DDKCORE/blob/master/docs/api/models.md#transaction)> | Transactions                           |
 | data.count        | number                                      | Total number of entries for the filter |
 
 ### GET TRANSACTIONS EXAMPLES
