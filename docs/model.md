@@ -1,16 +1,6 @@
 # Models
 
-## Transaction Types
-
-| Name      | Value |
-|-----------|-------|
-| REGISTER  | 0     |
-| SEND      | 10    |
-| SIGNATURE | 20    |
-| DELEGATE  | 30    |
-| STAKE     | 40    |
-| SENDSTAKE | 50    |
-| VOTE      | 60    |
+Basic models are [here](https://github.com/AraiEzzra/DDKCORE/blob/master/docs/api/models.md)
 
 ## Vote Types
 
@@ -23,27 +13,11 @@
 
 Type `string`
 
-## Transaction
-
-| Parameter       | Type                                   | Description                       |
-|-----------------|----------------------------------------|-----------------------------------|
-| id              | string                                 | Address                           |
-| blockId         | string                                 | Block id                          |
-| type            | [Transaction Type](#transaction-types) | Type                              |
-| createdAt       | number                                 | Creation time in epochtime format |
-| senderPublicKey | string                                 | Sender public key                 |
-| senderAddress   | string                                 | Sender address                    |
-| signature       | string                                 | Signature                         |
-| secondSignature | string                                 | Second signature                  |
-| salt            | string                                 | Salt                              |
-| relay           | number                                 | Transfer count                    |
-| asset           | [Asset](#asset)                        | Asset by type                     |
-
 ## Transaction Data
 
 | Parameter | Type                                   | Description                          |
 |-----------|----------------------------------------|--------------------------------------|
-| type      | [Transaction Type](#transaction-types) | Transaction type                     |
+| type      | [Transaction Type](https://github.com/AraiEzzra/DDKCORE/blob/master/docs/api/models.md#transaction-types) | Transaction type                     |
 | asset     | Asset Data                             | Asset data based on transaction type |
 
 ## Asset Referral Data
@@ -85,3 +59,5 @@ Type `string`
 | createdAt        | number                                    | Transaction creation time in epoch format |
 | votes            | Array<[Public Key](models.md#public-key)> | Array of delegates public key             |
 | type             | [Vote Type](#vote-types)                  | Vote type                                 |
+
+Basic models are [here](https://github.com/AraiEzzra/DDKCORE/blob/master/docs/api/models.md)

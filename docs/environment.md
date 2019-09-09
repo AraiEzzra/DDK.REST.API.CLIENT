@@ -1,11 +1,11 @@
-# Environment
+Ы# Environment
 
 ## How to create environment file
 
-Create a copy of sample.env file
+Create a copy of example.env file
 
 ```
-$ cp sample.env .env
+$ cp docker/example.env .env
 ```
 
 ## Environment variables
