@@ -66,7 +66,7 @@ ON_APPLY_BLOCK=webhook_url
 Calls after decline transaction
 
 ```
-DECLINE_TRANSACTION=webhook_url
+ON_DECLINE_TRANSACTION=webhook_url
 ```
 
 ### Time server host

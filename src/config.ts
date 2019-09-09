@@ -10,6 +10,7 @@ if (!workspace) {
 
 export const ON_APPLY_TRANSACTION = process.env.ON_APPLY_TRANSACTION;
 export const ON_APPLY_BLOCK = process.env.ON_APPLY_BLOCK;
+export const ON_DECLINE_TRANSACTION = process.env.ON_DECLINE_TRANSACTION;
 
 console.log(`[Config] Workspace: ${workspace}`);
 
