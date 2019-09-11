@@ -19,6 +19,20 @@ export class WebhookService<Action> {
         }
     }
 
+    unsubscribe(action: Action, url: string): void {
+        const urls = this.actions.get(action);
+        if (!urls) {
+            return;
+        }
+
+        const index = urls.findIndex(_url => url === _url);
+        if (index === -1) {
+            return;
+        }
+
+        urls.splice(index, 1);
+    }
+
     on(action: Action, data: any): void {
         if (!this.actions.has(action)) {
             return;
