@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { API_ACTION_TYPES } from 'ddk.registry/dist/model/transport/code';
 import { TransactionData } from 'ddk.registry/dist/model/common/type';
 import { Transaction } from 'ddk.registry/dist/model/common/transaction';
-import { transactionSerializer } from 'ddk.registry/dist/util/serialize/transaction';
 
 import { socketClient } from 'src/service/socket';
 import { validate } from 'src/util/validate';
@@ -38,18 +37,11 @@ export class TransactionController {
         const transactionResponse = await transactionService
             .create(transactionData, req.body.secret, req.body.secondSecret);
 
-        if (!transactionResponse.success) {
-            res.send(transactionResponse);
-        }
-
-        const serializedTransaction = transactionSerializer.serialize(transactionResponse.data);
-
-        const result = await socketClient.send(API_ACTION_TYPES.CREATE_PREPARED_TRANSACTION, serializedTransaction);
-        if (result.success) {
+        if (transactionResponse.success) {
             transactionRepository.add(transactionResponse.data);
         }
 
-        return res.send(result);
+        return res.send(transactionResponse);
     }
 }
 

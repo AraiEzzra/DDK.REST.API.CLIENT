@@ -1,4 +1,4 @@
-import { TransactionType } from 'ddk.registry/dist/model/common/transaction/type';
+import { TransactionType, SerializedTransaction } from 'ddk.registry/dist/model/common/transaction/type';
 import { AssetReferral, AssetReferralSchema } from 'ddk.registry/dist/model/common/transaction/asset/referral';
 import { AssetSend, AssetSendSchema } from 'ddk.registry/dist/model/common/transaction/asset/send';
 import { AssetDelegate, AssetDelegateSchema } from 'ddk.registry/dist/model/common/transaction/asset/delegate';
@@ -11,26 +11,44 @@ import { createAssetVote } from 'ddk.registry/dist/service/transaction/vote';
 import { createAssetStake } from 'ddk.registry/dist/service/transaction/stake';
 import { SlotService } from 'ddk.registry/dist/service/slot';
 import { Account } from 'ddk.registry/dist/model/common/account';
-import { TransactionData } from 'ddk.registry/dist/model/common/type';
+import { TransactionData, RawTransaction } from 'ddk.registry/dist/model/common/type';
 import { Transaction } from 'ddk.registry/dist/model/common/transaction';
 import { transactionCreator } from 'ddk.registry/dist/service/transaction';
+import { API_ACTION_TYPES } from 'ddk.registry/dist/model/transport/code';
+import { EVENT_TYPES } from 'ddk.registry/dist/model/transport/event';
 
 import { blockRepository, blockchainInfoRepository } from 'src/repository';
 import { AccountService } from 'src/service/account';
+import { SocketClient } from 'src/shared/socket';
 
 interface TimeService {
     getTime(): Promise<number>;
+}
+
+interface TransactionSerializer {
+    serialize(trs: Transaction<Asset>): SerializedTransaction;
+    deserialize(rawTrs: RawTransaction): Transaction<Asset>;
 }
 
 export class TransactionService {
     private readonly slotService: SlotService;
     private readonly timeService: TimeService;
     private readonly accountService: AccountService;
+    private readonly coreWebsocketClient: SocketClient<any, API_ACTION_TYPES | EVENT_TYPES>;
+    private readonly serializer: TransactionSerializer;
 
-    constructor(slotService: SlotService, timeService: TimeService, accountService: AccountService) {
+    constructor(
+        slotService: SlotService,
+        timeService: TimeService,
+        accountService: AccountService,
+        coreWebsocketClient: SocketClient<any, API_ACTION_TYPES | EVENT_TYPES>,
+        serializer: TransactionSerializer,
+    ) {
         this.slotService = slotService;
         this.timeService = timeService;
         this.accountService = accountService;
+        this.coreWebsocketClient = coreWebsocketClient;
+        this.serializer = serializer;
     }
 
     private createAsset(type: TransactionType, data: any): ResponseEntity<Asset> {
@@ -119,6 +137,12 @@ export class TransactionService {
         }
     }
 
+    private async sendToCore(transaction: Transaction<any>): Promise<ResponseEntity<Transaction<any>>> {
+        const serializedTransaction = this.serializer.serialize(transaction);
+
+        return this.coreWebsocketClient.send(API_ACTION_TYPES.CREATE_PREPARED_TRANSACTION, serializedTransaction);
+    }
+
     async create(
         data: TransactionData,
         secret: string,
@@ -150,11 +174,17 @@ export class TransactionService {
         }
 
         data.asset = assetResponse.data;
-        return transactionCreator.create({
+        const transactionResponse = transactionCreator.create({
             data,
             sender,
             secret,
             secondSecret,
         });
+
+        if (!transactionResponse.success) {
+            return transactionResponse;
+        }
+
+        return this.sendToCore(transactionResponse.data);
     }
 }

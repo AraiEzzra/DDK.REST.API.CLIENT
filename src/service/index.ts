@@ -1,6 +1,7 @@
 import timeService from 'eska-common/dist/time_service';
 import { EVENT_TYPES } from 'ddk.registry/dist/model/transport/event';
 import { slotService } from 'ddk.registry/dist/service/slot';
+import { transactionSerializer } from 'ddk.registry/dist/util/serialize/transaction';
 
 import { socketClient } from 'src/service/socket';
 import { blockchainInfoRepository, blockRepository, transactionRepository } from 'src/repository';
@@ -26,7 +27,13 @@ export const transactionConfirmationService = new TransactionConfirmationService
     blockRepository,
     NUMBER_OF_CONFIRMATIONS,
 );
-export const transactionService = new TransactionService(slotService, timeService, accountService);
+export const transactionService = new TransactionService(
+    slotService,
+    timeService,
+    accountService,
+    socketClient,
+    transactionSerializer,
+);
 
 configureWebhooks(webhookService);
 configureSocketListeners(socketClient);
