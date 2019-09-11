@@ -13,6 +13,7 @@ import { socketClient } from 'src/service/socket';
 import { validate } from 'src/util/validate';
 import { calculateAsset } from 'src/service/transaction';
 import { accountService } from 'src/service';
+import { transactionRepository } from 'src/repository';
 
 export class TransactionController {
     @validate
@@ -75,6 +76,8 @@ export class TransactionController {
         if (!transactionResponse.success) {
             res.send(transactionResponse);
         }
+
+        transactionRepository.add(transactionResponse.data);
 
         const serializedTransaction = transactionSerializer.serialize(transactionResponse.data);
 

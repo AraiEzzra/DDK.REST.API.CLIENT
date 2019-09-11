@@ -12,8 +12,7 @@ import { createAssetStake } from 'ddk.registry/dist/service/transaction/stake';
 import { slotService } from 'ddk.registry/dist/service/slot';
 import { Account } from 'ddk.registry/dist/model/common/account';
 
-import { blockRepository } from 'src/repository/block';
-import { blockchainInfoRepository } from 'src/repository/blockchainInfo';
+import { blockRepository, blockchainInfoRepository } from 'src/repository';
 
 export const createAsset = (type: TransactionType, data: any): ResponseEntity<Asset> => {
     switch (type) {

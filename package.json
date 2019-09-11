@@ -6,14 +6,15 @@
   "scripts": {
     "build": "webpack --config webpack.config.prod.js",
     "watch": "webpack --watch",
-    "nodemon": "nodemon \"./dist/bundle.js\"",
+    "nodemon": "sleep 5 && nodemon \"./dist/bundle.js\"",
+    "debug": "npm run watch & sleep 5 && nodemon --inspect=0.0.0.0:9229 \"./dist/bundle.js\"",
     "start": "npm run watch & npm run nodemon"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AraiEzzra/DDK.REST.API.CLIENT.git"
   },
-  "author": "",
+  "author": "Oleksandr Shevchenko",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/AraiEzzra/DDK.REST.API.CLIENT/issues"

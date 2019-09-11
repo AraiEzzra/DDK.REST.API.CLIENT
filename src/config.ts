@@ -1,6 +1,8 @@
 import dotenv from 'dotenv';
 import DDK, { WORKSPACE } from 'ddk.registry';
 
+import { DEFAULT_NUMBER_OF_CONFIRMATIONS } from 'src/const';
+
 dotenv.config();
 
 const workspace = WORKSPACE[process.env.WORKSPACE];
@@ -11,6 +13,8 @@ if (!workspace) {
 export const ON_APPLY_TRANSACTION = process.env.ON_APPLY_TRANSACTION;
 export const ON_APPLY_BLOCK = process.env.ON_APPLY_BLOCK;
 export const ON_DECLINE_TRANSACTION = process.env.ON_DECLINE_TRANSACTION;
+
+export const NUMBER_OF_CONFIRMATIONS = Number(process.env.NUMBER_OF_CONFIRMATIONS) || DEFAULT_NUMBER_OF_CONFIRMATIONS;
 
 console.log(`[Config] Workspace: ${workspace}`);
 
