@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import Validator from 'ddk.registry/dist/util/validate';
 
 import * as schemas from 'src/util/validate/schema';
+import { HTTP_STATUS } from 'src/util/http';
+import { ResponseEntity } from 'ddk.registry/dist/model/common/responseEntity';
 
 const validator: Validator = new Validator({
     noTypeless: true,
@@ -26,7 +28,9 @@ export const validate = (_target: any, _propertyName: string, descriptor: Proper
 
             validator.validate(data, schemaId, (errors: Array<Validator.SchemaError>, isValid: boolean) => {
                 if (!isValid) {
-                    res.send({ errors: [`Invalid arguments`, ...errors.map(err => err.message)] });
+                    res
+                        .status(HTTP_STATUS.INTERNAL_SERVER_ERROR)
+                        .send(new ResponseEntity({ errors: [`Invalid arguments`, ...errors.map(err => err.message)] }));
                     return;
                 }
                 return descriptorFn.call(this, req, res);

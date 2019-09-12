@@ -5,6 +5,7 @@
 ### API
 
 1. [Accounts](docs/api/account.md)
+1. [Blocks](docs/api/block.md)
 2. [Transactions](docs/api/transaction.md)
 3. [Utils](docs/api/util.md)
 

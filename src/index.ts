@@ -8,6 +8,7 @@ import { transactionRouter } from 'src/router/transaction';
 import { accountRouter } from 'src/router/account';
 import { utilRouter } from 'src/router/util';
 import { webhookRouter } from 'src/router/webhook';
+import { blockRouter } from 'src/router/block';
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use('/api/transactions', transactionRouter);
+app.use('/api/blocks', blockRouter);
 app.use('/api/accounts', accountRouter);
 app.use('/api/utils', utilRouter);
 app.use('/api/webhook', webhookRouter);
