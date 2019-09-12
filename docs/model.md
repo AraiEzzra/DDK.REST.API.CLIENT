@@ -2,6 +2,14 @@
 
 Basic models are [here](https://github.com/AraiEzzra/DDKCORE/blob/master/docs/api/models.md)
 
+## Transactions Filter
+
+| Parameter        | Type   | Description           |
+|------------------|--------|-----------------------|
+| type         | [Transaction Type](https://github.com/AraiEzzra/DDKCORE/blob/master/docs/api/models.md#transaction-types) | Transaction type |
+| blockId     | string | Block Id |
+| senderPublicKey     | string | Sender public key |
+
 ## Vote Types
 
 | Name      | Value |

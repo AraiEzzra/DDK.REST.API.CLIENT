@@ -144,7 +144,7 @@ Body parameters
 
 | Parameter | Type                                            | Is Required | Description                |
 |-----------|-------------------------------------------------|-------------|----------------------------|
-| filter    | [Transaction Type](https://github.com/AraiEzzra/DDKCORE/blob/master/docs/api/models.md#transaction-types) | -           | Filter by transaction type |
+| filter    | [Transactions Filter](../model.md#transactions-filter) | -           | Filter |
 | sort      | array<[Sort](../model.md#sort)>                   | -           | Sort                       |
 | limit     | number                                          | +           | Limit                      |
 | offset    | number                                          | +           | Offset                     |
