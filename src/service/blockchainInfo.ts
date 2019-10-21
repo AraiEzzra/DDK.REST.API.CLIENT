@@ -6,13 +6,13 @@ import { SocketClient } from 'src/shared/socket';
 import { IBlockchainInfoRepository } from 'src/repository/blockchainInfo';
 
 export class BlockchainInfoService {
-    private blockchainInfoRepository: IBlockchainInfoRepository;
+    private repository: IBlockchainInfoRepository;
 
     constructor(
         blockchainInfoRepository: IBlockchainInfoRepository,
         socketClient: SocketClient<any, EVENT_TYPES | API_ACTION_TYPES>,
     ) {
-        this.blockchainInfoRepository = blockchainInfoRepository;
+        this.repository = blockchainInfoRepository;
 
         // TODO: fetch blockchain info when API will be added to core
 
@@ -20,6 +20,6 @@ export class BlockchainInfoService {
     }
 
     private onUpdateBlockchainInfo = (info: BlockchainInfoSchema): void => {
-        this.blockchainInfoRepository.airdropBalance = info.airdropBalance;
+        this.repository.update(info);
     }
 }
