@@ -16,10 +16,10 @@ export class BlockchainInfoService {
 
         // TODO: fetch blockchain info when API will be added to core
 
-        socketClient.addCodeListener(EVENT_TYPES.UPDATE_BLOCKCHAIN_INFO, this.onUpdateBlockchainInfo);
+        socketClient.addCodeListener(EVENT_TYPES.UPDATE_BLOCKCHAIN_INFO, this.onUpdate);
     }
 
-    private onUpdateBlockchainInfo = (info: BlockchainInfoSchema): void => {
+    private onUpdate = (info: BlockchainInfoSchema): void => {
         this.repository.update(info);
     }
 }
