@@ -45,7 +45,7 @@ Response
 | Parameter | Type                            | Description        |
 |-----------|---------------------------------|--------------------|
 | success   | boolean                         | Operation status   |
-| data      | [KeyPair](../model.md#key-pair) | Account passphrase |
+| data      | [KeyPair](../model.md#key-pair) | Key pair           |
 
 ### Make key pair examples
 
