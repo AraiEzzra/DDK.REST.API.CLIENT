@@ -4,7 +4,7 @@ import { slotService } from 'ddk.registry/dist/service/slot';
 import { transactionSerializer } from 'ddk.registry/dist/util/serialize/transaction';
 
 import { socketClient } from 'src/service/socket';
-import { blockchainInfoRepository, blockRepository, transactionRepository } from 'src/repository';
+import { blockchainInfoRepository, blockRepository, transactionRepository, systemInfoRepository } from 'src/repository';
 import { BlockchainInfoService } from 'src/service/blockchainInfo';
 import { BlockService } from 'src/service/block';
 import { AccountService } from 'src/service/account';
@@ -17,9 +17,11 @@ import {
 import { TransactionConfirmationService } from 'src/service/transaction/confirmation';
 import { NUMBER_OF_CONFIRMATIONS } from 'src/config';
 import { TransactionService } from 'src/service/transaction';
+import { SystemInfoService } from 'src/service/systemInfo';
 
 export const blockService = new BlockService(blockRepository, socketClient);
 export const blockchainInfoService = new BlockchainInfoService(blockchainInfoRepository, socketClient);
+export const systemInfoService = new SystemInfoService(systemInfoRepository, socketClient);
 export const accountService = new AccountService();
 export const webhookService = new WebhookService<WebhookAction | EVENT_TYPES>();
 export const transactionConfirmationService = new TransactionConfirmationService(
