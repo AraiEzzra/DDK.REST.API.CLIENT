@@ -1,4 +1,4 @@
-# System
+# SYSTEM
 
 ## GET INFO
 
@@ -15,11 +15,7 @@ Response
 | success   | boolean                                 | Operation status                 |
 | data      | [System Info](../model.md#system-info) | System information               |
 
-### GET SYSTEM INFO EXAMPLES
-
-Request
-
-GET `/api/system/info`
+### GET INFO EXAMPLES
 
 Successful response
 
@@ -93,44 +89,6 @@ Successful response
             "conflictedQueue": 0,
             "pool": 0
         }
-    }
-}
-```
-
-## GET BLOCKCHAIN INFO
-
-Request for getting blockchain information.
-
-Method URL: `/api/system/blockchain-info`
-
-HTTP method: `GET`
-
-Response
-
-| Parameter | Type                                            | Description                      |
-|-----------|-------------------------------------------------|----------------------------------|
-| success   | boolean                                         | Operation status                 |
-| data      | [Blockchain Info](../model.md#blockchain-info) | Blockchain information           |
-
-### GET BLOCKCHAIN INFO EXAMPLES
-
-Request
-
-GET `/api/system/blockchain-info`
-
-Successful response
-
-```json
-{
-    "success": true,
-    "data": {
-        "airdropBalance": 89547337500000,
-        "totalSupply": 4500000000000000,
-        "circulatingSupply": 928013305770000,
-        "tokenHolders": 30,
-        "totalStakeAmount": 4520900000000,
-        "totalStakeHolders": 4,
-        "transactionsCount": 965139
     }
 }
 ```
