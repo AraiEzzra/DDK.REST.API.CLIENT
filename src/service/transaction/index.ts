@@ -17,7 +17,7 @@ import { transactionCreator } from 'ddk.registry/dist/service/transaction';
 import { API_ACTION_TYPES } from 'ddk.registry/dist/model/transport/code';
 import { EVENT_TYPES } from 'ddk.registry/dist/model/transport/event';
 
-import { blockRepository, blockchainInfoRepository } from 'src/repository';
+import { blockRepository, blockchainRepository } from 'src/repository';
 import { AccountService } from 'src/service/account';
 import { SocketClient } from 'src/shared/socket';
 
@@ -116,7 +116,7 @@ export class TransactionService {
                     amount: transaction.asset.amount,
                 },
                     sender,
-                    blockchainInfoRepository.airdropBalance,
+                    blockchainRepository.getInfo().airdropBalance,
                 );
 
                 return new ResponseEntity({ data: assetStake });
@@ -128,7 +128,7 @@ export class TransactionService {
                 },
                     sender,
                     blockRepository.lastBlockHeight,
-                    blockchainInfoRepository.airdropBalance,
+                    blockchainRepository.getInfo().airdropBalance,
                 );
 
                 return new ResponseEntity({ data: assetVote });

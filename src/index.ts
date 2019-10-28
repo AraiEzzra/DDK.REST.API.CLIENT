@@ -9,6 +9,8 @@ import { accountRouter } from 'src/router/account';
 import { utilRouter } from 'src/router/util';
 import { webhookRouter } from 'src/router/webhook';
 import { blockRouter } from 'src/router/block';
+import { systemRouter } from 'src/router/system';
+import { blockchainRouter } from 'src/router/blockchain';
 
 const app = express();
 
@@ -20,6 +22,8 @@ app.use('/api/blocks', blockRouter);
 app.use('/api/accounts', accountRouter);
 app.use('/api/utils', utilRouter);
 app.use('/api/webhook', webhookRouter);
+app.use('/api/blockchain', blockchainRouter);
+app.use('/api/system', systemRouter);
 
 app.listen(process.env.SERVER_PORT, () => {
     console.log(`[DDK][RestAPI] Listening on port ${process.env.SERVER_PORT}!`);
