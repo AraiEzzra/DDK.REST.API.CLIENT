@@ -3,23 +3,23 @@ import { API_ACTION_TYPES } from 'ddk.registry/dist/model/transport/code';
 import { SystemInfoSchema } from 'ddk.registry/dist/model/common/type';
 
 import { SocketClient } from 'src/shared/socket';
-import { ISystemInfoRepository } from 'src/repository/systemInfo';
+import { ISystemRepository } from 'src/repository/system';
 
-export class SystemInfoService {
-    private repository: ISystemInfoRepository;
+export class SystemService {
+    private repository: ISystemRepository;
 
     constructor(
-        systemInfoRepository: ISystemInfoRepository,
+        systemRepository: ISystemRepository,
         socketClient: SocketClient<any, EVENT_TYPES | API_ACTION_TYPES>,
     ) {
-        this.repository = systemInfoRepository;
+        this.repository = systemRepository;
 
         // TODO: fetch system info when API will be added to core
 
-        socketClient.addCodeListener(EVENT_TYPES.UPDATE_SYSTEM_INFO, this.onUpdate);
+        socketClient.addCodeListener(EVENT_TYPES.UPDATE_SYSTEM_INFO, this.onUpdateInfo);
     }
 
-    private onUpdate = (info: SystemInfoSchema): void => {
-        this.repository.update(info);
+    private onUpdateInfo = (info: SystemInfoSchema): void => {
+        this.repository.updateInfo(info);
     }
 }
