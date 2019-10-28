@@ -68,4 +68,11 @@ Type `string`
 | votes            | Array<[Public Key](models.md#public-key)> | Array of delegates public key             |
 | type             | [Vote Type](#vote-types)                  | Vote type                                 |
 
+## Key Pair
+
+| Parameter  | Type   | Description |
+|------------|--------|-------------|
+| publicKey  | string | Public key  |
+| privateKey | string | Private key |
+
 Basic models are [here](https://github.com/AraiEzzra/DDKCORE/blob/master/docs/api/models.md)
