@@ -65,7 +65,7 @@ Type `string`
 | Parameter        | Type                                      | Description                               |
 |------------------|-------------------------------------------|-------------------------------------------|
 | createdAt        | number                                    | Transaction creation time in epoch format |
-| votes            | Array<[Public Key](models.md#public-key)> | Array of delegates public key             |
+| votes            | Array<[Public Key](#public-key)> | Array of delegates public key             |
 | type             | [Vote Type](#vote-types)                  | Vote type                                 |
 
 ## Key Pair
@@ -74,5 +74,60 @@ Type `string`
 |------------|--------|-------------|
 | publicKey  | string | Public key  |
 | privateKey | string | Private key |
+
+## System Info
+
+| Parameter         | Type                                      | Description           |
+|-------------------|-------------------------------------------|-----------------------|
+| height            | number                                    | Last block height     |
+| consensus         | number                                    | Consensus (percent)   |
+| datetime          | number                                    | Current date          |
+| peersCount        | number                                    | Peers count           |
+| peers             | Array<[Peer](#peer)>                      | Peers                 |
+| broadhash         | string                                    | Last block id         |
+| version           | string                                    | Node version          |
+| transactionsCount | [Transactions Count](#transactions-count) | Transactions count    |
+
+## Peer
+
+| Parameter         | Type                              | Description                     |
+|-------------------|-----------------------------------|---------------------------------|
+| height            | number                            | Last block height               |
+| broadhash         | string                            | Last block id                   |
+| blocksIds         | Array<[Block Id](#peer-block-id)> | Last blocks info                |
+| os                | string                            | Operating system                |
+| version           | string                            | Node version                    |
+| minVersion        | string                            | Min node version for connection |
+| peerCount         | number                            | Count of peers                  |
+| ip                | string                            | Host IP                         |
+| port              | number                            | Port                            |
+| peersCount        | number                            | Count of peers                  |
+
+## Peer Block Id
+
+| Parameter         | Type               | Description           |
+|-------------------|--------------------|-----------------------|
+| 0 (index)         | number             | height                |
+| 1 (index)         | string             | id                    |
+
+## Transactions Count
+
+| Parameter         | Type   | Description             |
+|-------------------|--------|-------------------------|
+| queue             | number | In queue                |
+| conflictedQueue   | number | In conflicted queue     |
+| pool              | number | In pool                 |
+
+## Blockchain Info
+
+| Parameter         | Type   | Description             |
+|-------------------|--------|-------------------------|
+| airdropBalance    | number | Airdrop account balance |
+| totalSupply       | number | Total supply            |
+| circulatingSupply | number | Circulating supply      |
+| tokenHolders      | number | Token holders count     |
+| totalStakeAmount  | number | Total stake amount      |
+| totalStakeHolders | number | Total stake holders     |
+| transactionsCount | number | Transactions count      |
 
 Basic models are [here](https://github.com/AraiEzzra/DDKCORE/blob/master/docs/api/models.md)
