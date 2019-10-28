@@ -68,6 +68,13 @@ Type `string`
 | votes            | Array<[Public Key](#public-key)> | Array of delegates public key             |
 | type             | [Vote Type](#vote-types)                  | Vote type                                 |
 
+## Key Pair
+
+| Parameter  | Type   | Description |
+|------------|--------|-------------|
+| publicKey  | string | Public key  |
+| privateKey | string | Private key |
+
 ## System Info
 
 | Parameter         | Type                                      | Description           |
