@@ -1,5 +1,8 @@
 # Webhook
 
+| **Warning**: Webhook doesn't guarantee delivery of each unit |
+| --- |
+
 ## Subscribe
 
 ### Subscribe on transaction confirm

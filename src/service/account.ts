@@ -5,11 +5,11 @@ import { Account } from 'ddk.registry/dist/model/common/account';
 import { ResponseEntity } from 'ddk.registry/dist/model/common/responseEntity';
 import { SerializedAccount, Address, PublicKey } from 'ddk.registry/dist/model/common/type';
 
-import { socketClient } from 'src/service/socket';
+import { nodePool } from 'src/service';
 
 export class AccountService {
     async fetchByAddress(address: Address): Promise<ResponseEntity<Account>> {
-        const accountResponse = await socketClient.send<{ address: BigInt }, SerializedAccount>(
+        const accountResponse = await nodePool.send<{ address: BigInt }, SerializedAccount>(
             API_ACTION_TYPES.GET_ACCOUNT,
             { address },
         );
