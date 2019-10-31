@@ -1,6 +1,7 @@
 import { ResponseEntity } from 'ddk.registry/dist/model/common/responseEntity';
 import { API_ACTION_TYPES } from 'ddk.registry/dist/model/transport/code';
 import { EVENT_TYPES } from 'ddk.registry/dist/model/transport/event';
+import { Block } from 'ddk.registry/dist/model/common/block';
 
 import { Node } from 'src/model/node';
 import { SocketListenerManager } from 'src/service/socketListenerManager';
@@ -9,6 +10,7 @@ export class NodePool {
     private readonly socketListenerManager: SocketListenerManager;
     private readonly nodes: Array<Node>;
     private readonly compareNodes: (a: Node, b: Node) => number;
+    private readonly nodeSwitchHeightThreshold: number = 3;
     private primary: Node;
 
     constructor(
@@ -21,15 +23,33 @@ export class NodePool {
         this.socketListenerManager = socketListenerManager;
 
         this.onDisconnect = this.onDisconnect.bind(this);
+        this.onApplyBlock = this.onApplyBlock.bind(this);
 
-        this.nodes.map(node => node.socket.on('disconnect', (_reason: string) => {
+        this.nodes.forEach(node => node.socket.on('disconnect', (_reason: string) => {
             this.onDisconnect(node);
         }));
-        this.nodes.map(node => node.socket.on('connect_timeout', (_timeout: number) => {
+        this.nodes.forEach(node => node.socket.on('connect_timeout', (_timeout: number) => {
             this.onDisconnect(node);
         }));
 
-        // TODO: Add a height checker. Repick if a node will befall behind
+        this.nodes.forEach(node => {
+            node.socket.addCodeListener(EVENT_TYPES.APPLY_BLOCK, this.onApplyBlock);
+
+            // TODO: fix removing listeners
+            node.socket.on('reconnect', () => {
+                node.socket.addCodeListener(EVENT_TYPES.APPLY_BLOCK, this.onApplyBlock);
+            });
+        });
+    }
+
+    private onApplyBlock(block: Block) {
+        if (!this.primary) {
+            return;
+        }
+
+        if (this.primary.height + this.nodeSwitchHeightThreshold <= block.height) {
+            this.repickPrimary();
+        }
     }
 
     private onDisconnect(node: Node) {
