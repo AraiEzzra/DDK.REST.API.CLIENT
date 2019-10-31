@@ -75,21 +75,23 @@ Body parameters
 | Parameter | Type                                               | Is Required | Description                |
 |-----------|----------------------------------------------------|-------------|----------------------------|
 | sort      | array<[Sort](../model.md#sort)>                    | -           | Sort                       |
-| filter    | [Blocks Filter](../model.md#get-blocks-filter)     | -           | Filter                     |
+| filter    | [Blocks Filter](../model.md#blocks-filter)         | -           | Filter                     |
 | limit     | number                                             | +           | Limit                      |
 | offset    | number                                             | +           | Offset                     |
 
 Response
 
-| Parameter         | Type                                        | Description                            |
-|-------------------|---------------------------------------------|----------------------------------------|
-| success           | boolean                                     | Operation status                       |
-| data.blocks | array<[Block](https://github.com/AraiEzzra/DDKCORE/blob/master/docs/api/models.md#block)> | Blocks                           |
-| data.count        | number                                      | Total number of blocks |
+| Parameter   | Type                                        | Description                            |
+|-------------|---------------------------------------------|----------------------------------------|
+| success     | boolean                                     | Operation status                       |
+| data.blocks | array<[Block](https://github.com/AraiEzzra/DDKCORE/blob/master/docs/api/models.md#block)> | Blocks |
+| data.count  | number                                      | Total number of blocks |
 
 ### GET TRANSACTIONS EXAMPLES
 
 #### Example getting last block
+
+Request body
 
 ```json
 {
@@ -104,7 +106,7 @@ Response
 }
 ```
 
-Successful response
+Response
 
 ```json
 {
