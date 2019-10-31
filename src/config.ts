@@ -26,9 +26,10 @@ BigInt.prototype.toJSON = function () {
 };
 
 if (process.env.NODE_HOST || process.env.NODE_API_PORT) {
-    throw `Please, update the list of nodes in .env file by instruction: ` +
-    `https://github.com/AraiEzzra/DDK.REST.API.CLIENT/blob/master/docs/environment.md#ddk-node-hosts` +
-    `, and remove NODE_HOST, NODE_API_PORT variables`;
+    const errorMessage = `Please, update the list of nodes in .env file by instruction: ` +
+        `https://github.com/AraiEzzra/DDK.REST.API.CLIENT/blob/master/docs/environment.md#ddk-node-hosts ` +
+        `and remove NODE_HOST, NODE_API_PORT environments`;
+    throw new Error(errorMessage);
 }
 
 const NODE_HOSTS_ENV = process.env.NODE_HOSTS;
