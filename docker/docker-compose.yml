@@ -1,11 +1,8 @@
 version: "2"
 services:
-  ddk_rest_api_prod:
-    build:
-      dockerfile: prod.Dockerfile
-      context: ../
-    image: ddk_rest_api_prod
-    container_name: ddk_rest_api_prod
+  ddk_rest_api:
+    image: ddkoin/rest-api-client:stable
+    container_name: ddk_rest_api
     ports:
       - 7070:7070
     env_file:

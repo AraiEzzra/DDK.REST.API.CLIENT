@@ -130,4 +130,10 @@ Type `string`
 | totalStakeHolders | number | Total stake holders     |
 | transactionsCount | number | Transactions count      |
 
+## Blocks filter
+
+| Parameter        | Type   | Description           |
+|------------------|--------|-----------------------|
+| height           | number | Block height          |
+
 Basic models are [here](https://github.com/AraiEzzra/DDKCORE/blob/master/docs/api/models.md)
