@@ -136,4 +136,11 @@ Type `string`
 |------------------|--------|-----------------------|
 | height           | number | Block height          |
 
+## Create Account Data
+
+| Parameter        | Type   | Description           |
+|------------------|--------|-----------------------|
+| publicKey        | string | Account public key    |
+| address          | string | Account address       |
+
 Basic models are [here](https://github.com/AraiEzzra/DDKCORE/blob/master/docs/api/models.md)

@@ -6,3 +6,4 @@ export const accountRouter = express.Router();
 
 accountRouter.get('/:address', accountController.get);
 accountRouter.get('/:address/balance', accountController.getBalance);
+accountRouter.post('/', accountController.create);
