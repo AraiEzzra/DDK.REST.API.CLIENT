@@ -28,9 +28,7 @@ export class BlockController {
 
     async getLast(_req: Request, res: Response): Promise<Response> {
         const response = await socketClient
-        // TODO: move GET_LAST_BLOCK to DDK.Registry
-        // @ts-ignore
-            .send('GET_LAST_BLOCK', {});
+            .send(API_ACTION_TYPES.GET_LAST_BLOCK, {});
 
         return res.send(response);
     }
