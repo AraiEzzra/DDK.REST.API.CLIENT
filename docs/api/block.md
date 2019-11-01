@@ -1,5 +1,8 @@
 # Block
 
+| **Warning**: All requests for getting block(s) return no transactions. For getting transactions use [this](transaction.md#get-transactions) API with `block_id` filter |
+| --- |
+
 ## GET BLOCK
 
 Request for getting block by id (without transactions). Returns block or null if the block does not exist.
@@ -69,21 +72,24 @@ HTTP method: `POST`
 
 Body parameters
 
-| Parameter | Type                                            | Is Required | Description                |
-|-----------|-------------------------------------------------|-------------|----------------------------|
-| sort      | array<[Sort](../model.md#sort)>                 | -           | Sort                       |
-| limit     | number                                          | +           | Limit                      |
-| offset    | number                                          | +           | Offset                     |
+| Parameter | Type                                               | Is Required | Description                |
+|-----------|----------------------------------------------------|-------------|----------------------------|
+| sort      | array<[Sort](../model.md#sort)>                    | -           | Sort                       |
+| filter    | [Blocks Filter](../model.md#blocks-filter)         | -           | Filter                     |
+| limit     | number                                             | +           | Limit                      |
+| offset    | number                                             | +           | Offset                     |
 
 Response
 
-| Parameter         | Type                                        | Description                            |
-|-------------------|---------------------------------------------|----------------------------------------|
-| success           | boolean                                     | Operation status                       |
-| data.blocks | array<[Block](https://github.com/AraiEzzra/DDKCORE/blob/master/docs/api/models.md#block)> | Blocks                           |
-| data.count        | number                                      | Total number of blocks |
+| Parameter   | Type                                        | Description                            |
+|-------------|---------------------------------------------|----------------------------------------|
+| success     | boolean                                     | Operation status                       |
+| data.blocks | array<[Block](https://github.com/AraiEzzra/DDKCORE/blob/master/docs/api/models.md#block)> | Blocks |
+| data.count  | number                                      | Total number of blocks |
 
 ### GET TRANSACTIONS EXAMPLES
+
+#### Example getting last block
 
 Request body
 
@@ -100,7 +106,7 @@ Request body
 }
 ```
 
-Successful response
+Response
 
 ```json
 {
@@ -124,6 +130,48 @@ Successful response
             }
         ],
         "count": 414059
+    }
+}
+```
+
+#### Example getting block by height
+
+Request body
+
+```javascript
+{
+    "limit": 1,
+    "offset": 0,
+    "filter": {
+    	"height": 10
+    }
+}
+```
+
+Response
+
+```json
+{
+    "success": true,
+    "data": {
+        "blocks": [
+            {
+                "id": "9f79e3c42b617769cb1f3aff61fac7af23014489c83ad01f90c22a98393df3b7",
+                "version": 1,
+                "height": 10,
+                "transactionCount": 0,
+                "amount": 0,
+                "fee": 0,
+                "payloadHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "generatorPublicKey": "301c99b6ee57807664eae0a43a58c7d39c5e8a6441aa2239e2024046161e652f",
+                "signature": "cfd58ae8806a7d39e954d7716e8053c3a01db4949e2f9b5bfb66f862138976c52962ab59d7bd8310875c243b6de4418d01aeba78e05e366273fcddab83b4180e",
+                "relay": 0,
+                "transactions": [],
+                "createdAt": 118870930,
+                "previousBlockId": "30bec2549eafaf868192a6a7f0829b884cbf0f0b911dc237b62fda020c5897da"
+            }
+        ],
+        "count": 1
     }
 }
 ```

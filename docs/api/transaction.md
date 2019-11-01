@@ -30,7 +30,7 @@ Request body
 ```json
 {
    "secret":"empty hand absent pepper reward music top foil violin disease target exhibit",
-   "trs":{
+   "transaction":{
       "type":10,
       "asset":{
          "amount":100000000,

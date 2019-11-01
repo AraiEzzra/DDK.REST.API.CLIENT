@@ -21,3 +21,15 @@ export const getAccountBalanceScheme = {
     },
     required: ['address'],
 };
+
+export const createAccountScheme = {
+    id: 'POST /api/accounts/',
+    type: 'object',
+    properties: {
+        secret: {
+            type: 'string',
+            format: 'secret',
+        },
+    },
+    required: ['secret'],
+};

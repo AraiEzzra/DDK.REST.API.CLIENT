@@ -107,3 +107,58 @@ Failed response
     ]
 }
 ```
+
+## Create account
+
+Uses for generating public key and DDK address from secret
+
+Method URL: `/api/accounts`
+
+HTTP method: `POST`
+
+Body parameters
+
+| Parameter | Is Required | Description             |
+|-----------|-------------|-------------------------|
+| secret    | +           | Account passphrase      |
+
+Response
+
+| Parameter | Type                                   | Description               |
+|-----------|----------------------------------------|---------------------------|
+| success   | boolean                                | Operation status          |
+| data      | [Create Account Data](../model.md#create-account-data) | Account data |
+
+### Create Account Example
+
+Request body
+
+```json
+{
+	"secret": "bless gloom bargain square bench patient since illness tobacco garden cargo naive"
+}
+```
+
+Response
+
+```json
+{
+    "success": true,
+    "data": {
+        "publicKey": "1f89194cfe77e2d146053daec998f2feaa165fcb6d334fcea219a82822fdbcbf",
+        "address": "1134283086390612901"
+    }
+}
+```
+
+Failed Response
+
+```json
+{
+    "success": false,
+    "errors": [
+        "Invalid arguments",
+        "Object didn't pass validation for format secret: invalid secret"
+    ]
+}
+```
