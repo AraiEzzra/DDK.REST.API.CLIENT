@@ -3,9 +3,17 @@ services:
   ddk_rest_api:
     image: ddkoin/rest-api-client:stable
     container_name: ddk_rest_api
+    networks:
+      ddk-testnet:
+        ipv4_address: 10.5.0.20
     ports:
       - 7070:7070
     env_file:
       - .env
     restart: always
     command: node dist/bundle.js
+
+networks:
+  ddk-testnet:
+    external:
+      name: docker_ddk-testnet
