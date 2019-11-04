@@ -1,9 +1,15 @@
 # Update
 
-To update Rest API client enter the following command in the docker folder:
+To update Rest API Client enter the following command in the docker folder:
 
 ```bash
-docker-compose up -d
+sh update.sh
 ```
 
-If a new version is available on the Docker hub, the image will be updated and started
+It recreate `docker-compose.yml` with new version from `package.json`
+
+Then run `start.sh` script
+
+```bash
+sh start.sh
+```
