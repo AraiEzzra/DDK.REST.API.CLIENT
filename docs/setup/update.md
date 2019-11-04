@@ -1,9 +1,8 @@
 # Update
 
-To update RestAPI client run
+To update Rest API client enter the following command in the docker folder:
 
 ```bash
-cd docker
 docker-compose up -d
 ```
 

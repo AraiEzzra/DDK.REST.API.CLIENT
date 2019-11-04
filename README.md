@@ -8,6 +8,7 @@
 
 1. [Requirements](docs/setup/requirements.md)
 2. [Environments](docs/setup/environment.md)
+3. [Install](docs/setup/install.md)
 3. [Start](docs/setup/start.md)
 4. [Updating](docs/setup/update.md)
 
@@ -22,7 +23,7 @@
 7. [System](docs/api/system.md)
 8. [Blockchain](docs/api/blockchain.md)
 
-### Models
+## Models
 
 1. [API](docs/model.md)
 2. [Blockchain](https://github.com/AraiEzzra/DDKCORE/blob/master/docs/api/models.md)
