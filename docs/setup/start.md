@@ -6,17 +6,13 @@
 cd docker
 ```
 
-2. Starting DDK Rest API client uses docker-compose
-
-```bash
-docker-compose up -d
-```
-
-or use `start.sh` script
+2. To start DDK Rest API client enter the following command in the docker folder:
 
 ```bash
 sh start.sh
 ```
+
+It will recreate `docker-compose.yml` from the sample uses a version from `package.json`
 
 # Stop
 
