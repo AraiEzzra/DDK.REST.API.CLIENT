@@ -1,0 +1,21 @@
+stages:
+  - build
+  - upload
+
+build:
+  stage: build
+  only:
+    - master
+  tags:
+    - ddk.rest.api.client
+  script:
+    - sh build.sh
+
+upload:
+  stage: upload
+  only:
+    - master
+  tags:
+    - ddk.rest.api.client
+  script:
+    - sh /root/DDK.Delegat.Install.Environment/DDK.REST.API.UPLOAD.IMAGE.sh
