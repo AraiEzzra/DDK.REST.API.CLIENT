@@ -1,7 +1,7 @@
 version: "2"
 services:
   ddk_rest_api:
-    image: ddkoin/rest-api-client:1.0.1
+    image: ddkoin/rest-api-client:$version
     container_name: ddk_rest_api
     networks:
       ddk-testnet:
