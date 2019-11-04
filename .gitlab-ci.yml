@@ -1,0 +1,15 @@
+image: alpine
+
+stages:
+  - build
+  - upload
+
+build:
+  stage: build
+  script:
+    - docker build -f build.Dockerfile -t ddkoin/rest-api-client:stable .
+
+upload:
+  stage: upload
+  script:
+    - sh /root/DDK.Delegat.Install.Environment/DDK.REST.API.UPLOAD.IMAGE.sh
