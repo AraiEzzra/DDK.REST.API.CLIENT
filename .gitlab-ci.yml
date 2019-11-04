@@ -2,6 +2,10 @@ stages:
   - build
   - upload
 
+after_script:
+  - echo "Removing Docker images..."
+  - sh docker/remove_images.sh
+
 build:
   stage: build
   only:
