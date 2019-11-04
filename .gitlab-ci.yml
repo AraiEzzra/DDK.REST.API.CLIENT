@@ -9,7 +9,7 @@ build:
   tags:
     - ddk.rest.api.client
   script:
-    - docker build -f build.Dockerfile -t ddkoin/rest-api-client:stable .
+    - sh build.sh
 
 upload:
   stage: upload
