@@ -21,8 +21,9 @@ import { SystemService } from 'src/service/system';
 import { initSocketIOClient } from 'src/service/socket';
 import { SocketIOClient } from 'src/shared/socketIOClient';
 import { NodePool } from 'src/service/nodePool';
-import { Node, nodeSort } from 'src/model/node';
+import { Node } from 'src/model/node';
 import { SocketListenerManager } from 'src/service/socketListenerManager';
+import { nodeComparator } from 'src/util/сomparator/node';
 
 export const blockService = new BlockService(blockRepository);
 export const blockchainService = new BlockchainService(blockchainRepository);
@@ -53,6 +54,6 @@ const nodes = NODE_HOSTS
     .map(host => initSocketIOClient(host.ip, host.port))
     .map(socket => new SocketIOClient<API_ACTION_TYPES | EVENT_TYPES>(socket))
     .map(socket => new Node(socket));
-export const nodePool = new NodePool(nodes, nodeSort, socketListenerManager);
+export const nodePool = new NodePool(nodes, nodeComparator, socketListenerManager);
 
 configureWebhooks(webhookService);

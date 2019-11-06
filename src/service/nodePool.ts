@@ -5,21 +5,22 @@ import { Block } from 'ddk.registry/dist/model/common/block';
 
 import { Node } from 'src/model/node';
 import { SocketListenerManager } from 'src/service/socketListenerManager';
+import { Comparator } from 'src/util/сomparator';
 
 export class NodePool {
     private readonly socketListenerManager: SocketListenerManager;
     private readonly nodes: Array<Node>;
-    private readonly compareNodes: (a: Node, b: Node) => number;
+    private readonly nodeComparator: Comparator<Node>;
     private readonly nodeSwitchHeightThreshold: number = 3;
     private primary: Node;
 
     constructor(
         nodes: Array<Node>,
-        compareNodes: (a: Node, b: Node) => number,
+        nodeComparator: Comparator<Node>,
         socketListenerManager: SocketListenerManager,
     ) {
         this.nodes = nodes;
-        this.compareNodes = compareNodes;
+        this.nodeComparator = nodeComparator;
         this.socketListenerManager = socketListenerManager;
 
         this.onDisconnect = this.onDisconnect.bind(this);
@@ -88,7 +89,7 @@ export class NodePool {
             this.primary.socket.removeCodeListeners();
         }
 
-        this.nodes.sort(this.compareNodes);
+        this.nodes.sort(this.nodeComparator.compare);
         this.primary = this.nodes[0];
         this.socketListenerManager.addListeners(this.primary.socket);
 

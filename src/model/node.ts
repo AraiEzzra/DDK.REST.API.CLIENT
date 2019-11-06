@@ -4,7 +4,12 @@ import { Block } from 'ddk.registry/dist/model/common/block';
 
 import { ISocketClient } from 'src/shared/socket';
 
-export class Node {
+export interface INode {
+    height: number;
+    isConnected: boolean;
+}
+
+export class Node implements INode {
     private blockchain: {
         height: number;
     };
@@ -41,33 +46,8 @@ export class Node {
     get height(): number {
         return this.blockchain.height;
     }
+
+    get isConnected(): boolean {
+        return this.socket.isConnected;
+    }
 }
-
-const nodeSortByConnect = (a: Node, b: Node): number => {
-    if (!a.socket.isConnected && b.socket.isConnected) {
-        return 1;
-    }
-    if (a.socket.isConnected && !b.socket.isConnected) {
-        return -1;
-    }
-    return 0;
-};
-
-const nodeSortByHeightASC = (a: Node, b: Node): number => {
-    if (a.height < b.height) {
-        return -1;
-    }
-    if (a.height > b.height) {
-        return 1;
-    }
-    return 0;
-};
-
-export const nodeSort = (a: Node, b: Node): number => {
-    let result = nodeSortByConnect(a, b);
-    if (result) {
-        return result;
-    }
-
-    return nodeSortByHeightASC(a, b) * -1;
-};
