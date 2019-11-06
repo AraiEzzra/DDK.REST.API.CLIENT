@@ -1,18 +1,12 @@
 # Start
 
-1. Open docker folder
+1. Open `docker` folder
 
 ```bash
 cd docker
 ```
 
-2. Starting DDK Rest API client uses docker-compose
-
-```bash
-docker-compose up -d
-```
-
-or use `start.sh` script
+2. To start Docker container enter:
 
 ```bash
 sh start.sh
@@ -20,14 +14,8 @@ sh start.sh
 
 # Stop
 
-To stop the container, open docker folder and enter
+To stop the container, open docker folder and enter:
 
 ```bash
-docker-compose down
-```
-
-or use `stop.sh` script
-
-```bash
-sh start.sh
+sh stop.sh
 ```

@@ -1,6 +1,6 @@
 {
   "name": "ddk.rest.api.client",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "DDK.REST.API.CLIENT",
   "main": "src/index.ts",
   "scripts": {

@@ -11,6 +11,7 @@
 3. [Install](docs/setup/install.md)
 3. [Start](docs/setup/start.md)
 4. [Updating](docs/setup/update.md)
+5. [Cleaning](docs/setup/clean.md)
 
 ### API
 
