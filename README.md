@@ -1,7 +1,5 @@
 # DDK RestAPI Client
 
-
-
 ## Documentation
 
 ### Setup
