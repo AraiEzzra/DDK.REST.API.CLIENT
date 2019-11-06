@@ -1,6 +1,6 @@
 {
   "name": "ddk.rest.api.client",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "DDK.REST.API.CLIENT",
   "main": "src/index.ts",
   "scripts": {
@@ -8,7 +8,8 @@
     "watch": "webpack --watch",
     "nodemon": "sleep 5 && nodemon \"./dist/bundle.js\"",
     "debug": "npm run watch & sleep 5 && nodemon --inspect=0.0.0.0:9229 \"./dist/bundle.js\"",
-    "start": "npm run watch & npm run nodemon"
+    "start": "npm run watch & npm run nodemon",
+    "test": "export NODE_PATH=./ && mocha --require ts-node/register './test/**/*.test.ts'"
   },
   "repository": {
     "type": "git",
@@ -33,13 +34,17 @@
     "z-schema": "^4.1.0"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.4",
     "@types/dotenv": "^6.1.1",
     "@types/express": "^4.17.0",
+    "@types/mocha": "^5.2.7",
     "@types/node": "^12.6.8",
     "@types/node-fetch": "^2.5.0",
     "@types/socket.io-client": "^1.4.32",
     "@types/uuid": "^3.4.5",
     "@types/ws": "^6.0.1",
+    "chai": "^4.2.0",
+    "mocha": "^6.2.2",
     "nodemon": "^1.19.1",
     "ts-loader": "^6.0.4",
     "ts-node": "^8.3.0",

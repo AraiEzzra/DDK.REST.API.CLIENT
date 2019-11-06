@@ -1,9 +1,9 @@
 import fetch from 'node-fetch';
 import { Block } from 'ddk.registry/dist/model/common/block';
+import { TransactionId } from 'ddk.registry/dist/model/common/type';
 
 import { TransactionRepository } from 'src/repository/transaction';
 import { BlockRepository } from 'src/repository/block';
-import { TransactionId } from 'ddk.registry/dist/model/common/type';
 
 export type TransactionConfirmationListener = {
     transactionId: TransactionId,

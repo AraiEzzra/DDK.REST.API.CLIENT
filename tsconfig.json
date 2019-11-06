@@ -29,7 +29,8 @@
             ]
         },
         "types": [
-            "node"
+            "node",
+            "mocha"
         ],
         "typeRoots": [
             "node_modules/@types"
