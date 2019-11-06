@@ -5,7 +5,7 @@ import { Block } from 'ddk.registry/dist/model/common/block';
 
 import { Node } from 'src/model/node';
 import { SocketListenerManager } from 'src/service/socketListenerManager';
-import { Comparator } from 'src/util/сomparator';
+import { Comparator } from 'src/util/comparator';
 
 export class NodePool {
     private readonly socketListenerManager: SocketListenerManager;

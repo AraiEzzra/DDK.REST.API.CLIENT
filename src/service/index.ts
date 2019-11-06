@@ -23,7 +23,7 @@ import { SocketIOClient } from 'src/shared/socketIOClient';
 import { NodePool } from 'src/service/nodePool';
 import { Node } from 'src/model/node';
 import { SocketListenerManager } from 'src/service/socketListenerManager';
-import { nodeComparator } from 'src/util/сomparator/node';
+import { nodeComparator } from 'src/util/comparator/node';
 
 export const blockService = new BlockService(blockRepository);
 export const blockchainService = new BlockchainService(blockchainRepository);
