@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
 import { INode } from 'src/model/node';
-import { nodeConnectComparator } from 'src/util/сomparator/node/connect';
+import { nodeConnectComparator } from 'src/util/comparator/node/connect';
 
 describe('Node Connect Comparator', () => {
     it('Test 1', () => {

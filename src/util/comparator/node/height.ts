@@ -1,4 +1,4 @@
-import { Comparator } from 'src/util/сomparator';
+import { Comparator } from 'src/util/comparator';
 import { INode } from 'src/model/node';
 import { Direction } from 'ddk.registry/dist/model/common/type';
 

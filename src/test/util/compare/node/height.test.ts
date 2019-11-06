@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
 import { INode } from 'src/model/node';
-import { nodeHeightDescComparator } from 'src/util/сomparator/node/height';
+import { nodeHeightDescComparator } from 'src/util/comparator/node/height';
 
 describe('Node Height Desc Comparator', () => {
     it('Test 1', () => {
