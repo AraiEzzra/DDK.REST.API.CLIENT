@@ -26,21 +26,7 @@ export class NodePool {
         this.onDisconnect = this.onDisconnect.bind(this);
         this.onApplyBlock = this.onApplyBlock.bind(this);
 
-        this.nodes.forEach(node => node.socket.on('disconnect', (_reason: string) => {
-            this.onDisconnect(node);
-        }));
-        this.nodes.forEach(node => node.socket.on('connect_timeout', (_timeout: number) => {
-            this.onDisconnect(node);
-        }));
-
-        this.nodes.forEach(node => {
-            node.socket.addCodeListener(EVENT_TYPES.APPLY_BLOCK, this.onApplyBlock);
-
-            // TODO: fix removing listeners
-            node.socket.on('reconnect', () => {
-                node.socket.addCodeListener(EVENT_TYPES.APPLY_BLOCK, this.onApplyBlock);
-            });
-        });
+        this.init();
     }
 
     private onApplyBlock(block: Block) {
@@ -59,6 +45,25 @@ export class NodePool {
         } else if (node.socket.uri === this.primary.socket.uri) {
             this.repickPrimary();
         }
+    }
+
+    private init() {
+        this.nodes.forEach(node => node.socket.on('disconnect', (_reason: string) => {
+            this.onDisconnect(node);
+        }));
+
+        this.nodes.forEach(node => node.socket.on('connect_timeout', (_timeout: number) => {
+            this.onDisconnect(node);
+        }));
+
+        this.nodes.forEach(node => {
+            node.socket.addCodeListener(EVENT_TYPES.APPLY_BLOCK, this.onApplyBlock);
+
+            // TODO: fix removing listeners
+            node.socket.on('reconnect', () => {
+                node.socket.addCodeListener(EVENT_TYPES.APPLY_BLOCK, this.onApplyBlock);
+            });
+        });
     }
 
     async send<Data, Response>(code: API_ACTION_TYPES | EVENT_TYPES, data: Data): Promise<ResponseEntity<Response>> {
