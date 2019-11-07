@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import { API_ACTION_TYPES } from 'ddk.registry/dist/model/transport/code';
-
-import { validate } from 'src/util/validate';
-import { socketClient } from 'src/service/socket';
 import { createKeyPairBySecret } from 'ddk.registry/dist/util/crypto';
 import { getAddressByPublicKey } from 'ddk.registry/dist/util/account';
 import { ResponseEntity } from 'ddk.registry/dist/model/common/responseEntity';
+
+import { validate } from 'src/util/validate';
+import { nodePool } from 'src/service';
 
 export class AccountController {
     @validate
@@ -26,7 +26,7 @@ export class AccountController {
 
     @validate
     async get(req: Request, res: Response): Promise<Response> {
-        const response = await socketClient.send(
+        const response = await nodePool.send(
             API_ACTION_TYPES.GET_ACCOUNT,
             req.params,
         );
@@ -36,7 +36,7 @@ export class AccountController {
 
     @validate
     async getBalance(req: Request, res: Response): Promise<Response> {
-        const response = await socketClient.send(
+        const response = await nodePool.send(
             API_ACTION_TYPES.GET_ACCOUNT_BALANCE,
             req.params,
         );

@@ -21,3 +21,4 @@ upload:
     - sh /root/DDK.Delegat.Install.Environment/DDK.REST.API.UPLOAD.IMAGE.sh
     - echo "Removing Docker images..."
     - sh docker/remove_images.sh
+  when: manual

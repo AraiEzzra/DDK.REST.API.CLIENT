@@ -1,4 +1,4 @@
-Ы# Environment
+# Environment
 
 ## How to create environment file
 
@@ -18,13 +18,16 @@ The default port is `7070`, but you can set any value
 SERVER_PORT=7070
 ```
 
-### DDK Node host and port
+### DDK Node hosts
+
+It is a comma-separated host:port string
 
 List with trusted nodes is [here](https://github.com/AraiEzzra/DDKCORE/blob/master/docs/api/example.md)
 
+Example
+
 ```
-NODE_HOST=xxx.xxx.xxx.xxx
-NODE_API_PORT=yyyy
+NODE_HOSTS=xxx.xxx.xxx.xxx:yyyy,xxx.xxx.xxx.xxx:yyyy,...,xxx.xxx.xxx.xxx:yyyy
 ```
 
 ### DDK Workspace
