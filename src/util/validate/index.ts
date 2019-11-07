@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import Validator from 'ddk.registry/dist/util/validate';
+import { ResponseEntity } from 'ddk.registry/dist/model/common/responseEntity';
 
 import * as schemas from 'src/util/validate/schema';
 import { HTTP_STATUS } from 'src/util/http';
-import { ResponseEntity } from 'ddk.registry/dist/model/common/responseEntity';
 
 const validator: Validator = new Validator({
     noTypeless: true,

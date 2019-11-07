@@ -75,7 +75,9 @@ export class NodePool {
         }
 
         const response = await this.primary.socket.send<Data, Response>(code, data);
-        if (!response.success) {
+        if (!response.success && response.errors.filter(error => error.toLowerCase().includes('timeout')).length) {
+            // TODO: ban this node or decrease priority
+            // https://trello.com/c/zRAMcjpv/52-add-ban-logic-for-slow-nodes
             this.repickPrimary();
             return this.send(code, data);
         }
