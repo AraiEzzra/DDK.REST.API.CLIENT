@@ -52,7 +52,7 @@ export class TransactionController {
             transactionRepository.add(transactionResponse.data);
         }
 
-        return res.send(transactionResponse);
+        return res.send(response);
     }
 }
 
