@@ -2,10 +2,6 @@ stages:
   - build
   - upload
 
-after_script:
-  - echo "Removing Docker images..."
-  - sh docker/remove_images.sh
-
 build:
   stage: build
   only:
@@ -23,3 +19,5 @@ upload:
     - ddk.rest.api.client
   script:
     - sh /root/DDK.Delegat.Install.Environment/DDK.REST.API.UPLOAD.IMAGE.sh
+    - echo "Removing Docker images..."
+    - sh docker/remove_images.sh
