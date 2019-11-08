@@ -9,8 +9,15 @@
     "nodemon": "sleep 5 && nodemon \"./dist/bundle.js\"",
     "debug": "npm run watch & sleep 5 && nodemon --inspect=0.0.0.0:9229 \"./dist/bundle.js\"",
     "start": "npm run watch & npm run nodemon",
-    "test": "export NODE_PATH=./ && mocha --require ts-node/register './src/test/**/*.test.ts'"
+    "lint": "tslint --project '.'",
+    "test": "export NODE_PATH=./ && mocha --require ts-node/register './src/test/**/*.test.ts'",
+    "precommit-msg": "echo 'Pre-commit checks...' && exit 0"
   },
+  "pre-commit": [
+    "precommit-msg",
+    "lint",
+    "test"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/AraiEzzra/DDK.REST.API.CLIENT.git"
@@ -46,6 +53,7 @@
     "chai": "^4.2.0",
     "mocha": "^6.2.2",
     "nodemon": "^1.19.1",
+    "pre-commit": "^1.2.2",
     "ts-loader": "^6.0.4",
     "ts-node": "^8.3.0",
     "tslint": "^5.18.0",
