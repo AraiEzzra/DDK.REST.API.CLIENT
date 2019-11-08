@@ -20,7 +20,7 @@ test:
     - ddk.rest.api.client
   script:
     - cd docker
-    - test.sh
+    - sh test.sh
 
 upload:
   stage: upload
