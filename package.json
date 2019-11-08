@@ -9,7 +9,7 @@
     "nodemon": "sleep 5 && nodemon \"./dist/bundle.js\"",
     "debug": "npm run watch & sleep 5 && nodemon --inspect=0.0.0.0:9229 \"./dist/bundle.js\"",
     "start": "npm run watch & npm run nodemon",
-    "test": "export NODE_PATH=./ && mocha --require ts-node/register './test/**/*.test.ts'"
+    "test": "export NODE_PATH=./ && mocha --require ts-node/register './src/test/**/*.test.ts'"
   },
   "repository": {
     "type": "git",
