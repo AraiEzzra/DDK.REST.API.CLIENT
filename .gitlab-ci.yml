@@ -1,5 +1,6 @@
 stages:
   - build
+  - test
   - upload
 
 build:
@@ -10,6 +11,16 @@ build:
     - ddk.rest.api.client
   script:
     - sh build.sh
+
+test:
+  stage: test
+  only:
+    - master
+  tags:
+    - ddk.rest.api.client
+  script:
+    - cd docker
+    - test.sh
 
 upload:
   stage: upload
