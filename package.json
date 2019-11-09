@@ -10,7 +10,7 @@
     "debug": "npm run watch & sleep 5 && nodemon --inspect=0.0.0.0:9229 \"./dist/bundle.js\"",
     "start": "npm run watch & npm run nodemon",
     "lint": "tslint --project '.'",
-    "test": "export NODE_PATH=./ && mocha --require ts-node/register './src/test/**/*.test.ts'",
+    "test": "export NODE_PATH=./ && mocha --require ts-node/register './src/**/*.test.ts'",
     "precommit-msg": "echo 'Pre-commit checks...' && exit 0"
   },
   "pre-commit": [

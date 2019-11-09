@@ -4,7 +4,7 @@ import { INode } from 'src/model/node';
 import { nodeComparator } from 'src/util/comparator/node';
 
 describe('Node Comparator', () => {
-    it('Test 1', () => {
+    it('Returns 0 when both nodes are connected and are on the same height', () => {
         const a: INode = { height: 500, isConnected: true };
         const b: INode = { height: 500, isConnected: true };
         const expected = 0;
@@ -13,7 +13,7 @@ describe('Node Comparator', () => {
         expect(expected).to.deep.equal(actual);
     });
 
-    it('Test 2', () => {
+    it('Returns 0 when both nodes are disconnected and are on the same height', () => {
         const a: INode = { height: 500, isConnected: false };
         const b: INode = { height: 500, isConnected: false };
         const expected = 0;
@@ -22,7 +22,7 @@ describe('Node Comparator', () => {
         expect(expected).to.deep.equal(actual);
     });
 
-    it('Test 3', () => {
+    it('Returns -1 when node A is connected and has height less than node B and node B is disconnected', () => {
         const a: INode = { height: 100, isConnected: true };
         const b: INode = { height: 500, isConnected: false };
         const expected = -1;
@@ -31,7 +31,7 @@ describe('Node Comparator', () => {
         expect(expected).to.deep.equal(actual);
     });
 
-    it('Test 4', () => {
+    it('Returns -1 when node A is connected and has height more than node B and node B is disconnected', () => {
         const a: INode = { height: 500, isConnected: true };
         const b: INode = { height: 100, isConnected: false };
         const expected = -1;
@@ -40,7 +40,7 @@ describe('Node Comparator', () => {
         expect(expected).to.deep.equal(actual);
     });
 
-    it('Test 5', () => {
+    it('Returns 1 when node A is disconnected and has height more than node B and node B is connected', () => {
         const a: INode = { height: 500, isConnected: false };
         const b: INode = { height: 100, isConnected: true };
         const expected = 1;
@@ -49,7 +49,7 @@ describe('Node Comparator', () => {
         expect(expected).to.deep.equal(actual);
     });
 
-    it('Test 6', () => {
+    it('Returns 1 when node A is disconnected and has height less than node B and node B is connected', () => {
         const a: INode = { height: 100, isConnected: false };
         const b: INode = { height: 500, isConnected: true };
         const expected = 1;
@@ -58,7 +58,7 @@ describe('Node Comparator', () => {
         expect(expected).to.deep.equal(actual);
     });
 
-    it('Test 7', () => {
+    it('Returns 1 when node A is connected and has height less than node B and node B is connected', () => {
         const a: INode = { height: 100, isConnected: true };
         const b: INode = { height: 500, isConnected: true };
         const expected = 1;
@@ -67,7 +67,7 @@ describe('Node Comparator', () => {
         expect(expected).to.deep.equal(actual);
     });
 
-    it('Test 8', () => {
+    it('Returns -1 when node A is connected and has height more than node B and node B is connected', () => {
         const a: INode = { height: 500, isConnected: true };
         const b: INode = { height: 100, isConnected: true };
         const expected = -1;
@@ -76,7 +76,7 @@ describe('Node Comparator', () => {
         expect(expected).to.deep.equal(actual);
     });
 
-    it('Test 9', () => {
+    it('Returns -1 when node A is disconnected and has height more than node B and node B is disconnected', () => {
         const a: INode = { height: 500, isConnected: false };
         const b: INode = { height: 100, isConnected: false };
         const expected = -1;
@@ -85,7 +85,7 @@ describe('Node Comparator', () => {
         expect(expected).to.deep.equal(actual);
     });
 
-    it('Test 10', () => {
+    it('Returns 1 when node A is disconnected and has height less than node B and node B is disconnected', () => {
         const a: INode = { height: 100, isConnected: false };
         const b: INode = { height: 500, isConnected: false };
         const expected = 1;
