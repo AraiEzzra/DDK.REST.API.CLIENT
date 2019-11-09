@@ -1,5 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import monitor from 'express-status-monitor';
 
 import 'src/config';
 import 'src/service';
@@ -16,6 +17,7 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(monitor());
 
 app.use('/api/transactions', transactionRouter);
 app.use('/api/blocks', blockRouter);
