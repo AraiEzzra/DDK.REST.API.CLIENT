@@ -4,3 +4,4 @@ dist
 .env
 .vscode
 docker/docker-compose.yml
+.DS_Store

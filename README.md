@@ -26,3 +26,8 @@
 
 1. [API](docs/model.md)
 2. [Blockchain](https://github.com/AraiEzzra/DDKCORE/blob/master/docs/api/models.md)
+
+## Common
+
+1. [Epochtime](docs/common/epochtime.md)
+2. [Amount](docs/common/amount.md)
