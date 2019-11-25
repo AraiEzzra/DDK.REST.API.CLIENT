@@ -4,7 +4,12 @@ export enum WebhookAction {
     APPLY_TRANSACTION = 'APPLY_TRANSACTION',
 }
 
-export class WebhookService<Action> {
+export interface ISubscriber<Action> {
+    subscribe(action: Action, url: string): void;
+    unsubscribe(action: Action, url: string): void;
+}
+
+export class WebhookService<Action> implements ISubscriber<Action> {
     private readonly actions: Map<Action, Array<string>>;
 
     constructor() {

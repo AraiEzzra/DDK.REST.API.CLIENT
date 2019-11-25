@@ -4,11 +4,14 @@ import { EVENT_TYPES } from 'ddk.registry/dist/model/transport/event';
 import { Block } from 'ddk.registry/dist/model/common/block';
 
 import { Node } from 'src/model/node';
-import { SocketListenerManager } from 'src/service/socketListenerManager';
 import { Comparator } from 'src/util/comparator';
+import { Emitter } from 'src/shared/emitter';
 
-export class NodePool {
-    private readonly socketListenerManager: SocketListenerManager;
+export enum NodePoolAction {
+    repick = 'repick',
+}
+
+export class NodePool extends Emitter<NodePoolAction> {
     private readonly nodes: Array<Node>;
     private readonly nodeComparator: Comparator<Node>;
     private readonly nodeSwitchHeightThreshold: number = 3;
@@ -17,11 +20,11 @@ export class NodePool {
     constructor(
         nodes: Array<Node>,
         nodeComparator: Comparator<Node>,
-        socketListenerManager: SocketListenerManager,
     ) {
+        super();
+
         this.nodes = nodes;
         this.nodeComparator = nodeComparator;
-        this.socketListenerManager = socketListenerManager;
 
         this.onDisconnect = this.onDisconnect.bind(this);
         this.onApplyBlock = this.onApplyBlock.bind(this);
@@ -98,8 +101,9 @@ export class NodePool {
 
         this.nodes.sort(this.nodeComparator.compare);
         this.primary = this.nodes[0];
-        this.socketListenerManager.addListeners(this.primary.socket);
 
         console.log(`[NodePool][repickPrimary] Primary node changed to ${this.primary.socket.uri}`);
+
+        this.emit(NodePoolAction.repick, this.primary);
     }
 }

@@ -10,6 +10,8 @@ import { ISocketClient } from 'src/shared/socket';
 import { TransactionConfirmationService } from 'src/service/transaction/confirmation';
 import { TransactionRepository } from 'src/repository/transaction';
 import { BlockRepository } from 'src/repository/block';
+import { NodePool, NodePoolAction } from 'src/service/nodePool';
+import { Node } from 'src/model/node';
 
 export class SocketListenerManager {
     private readonly systemService: SystemService;
@@ -28,6 +30,7 @@ export class SocketListenerManager {
         webhookService: WebhookService<WebhookAction | EVENT_TYPES>,
         transactionRepository: TransactionRepository,
         blockRepository: BlockRepository,
+        nodePool: NodePool,
     ) {
         this.systemService = systemService;
         this.blockchainService = blockchainService;
@@ -36,9 +39,15 @@ export class SocketListenerManager {
         this.webhookService = webhookService;
         this.transactionRepository = transactionRepository;
         this.blockRepository = blockRepository;
+
+        this.addListeners = this.addListeners.bind(this);
+
+        nodePool.on(NodePoolAction.repick, (node: Node) => {
+            this.addListeners(node.socket);
+        });
     }
 
-    private addWebhookServiceListeners(socket: ISocketClient) {
+    private addWebhookServiceListeners(socket: ISocketClient<string>) {
         socket.addCodeListener(EVENT_TYPES.DECLINE_TRANSACTION, (transaction: Transaction<any>) => {
             this.webhookService.on(EVENT_TYPES.DECLINE_TRANSACTION, transaction);
         });
@@ -52,11 +61,11 @@ export class SocketListenerManager {
         });
     }
 
-    private addBlockServiceListeners(socket: ISocketClient) {
+    private addBlockServiceListeners(socket: ISocketClient<string>) {
         socket.addCodeListener(EVENT_TYPES.APPLY_BLOCK, this.blockService.onApplyBlock);
     }
 
-    private addTransactionConfirmationServiceListeners(socket: ISocketClient) {
+    private addTransactionConfirmationServiceListeners(socket: ISocketClient<string>) {
         socket.addCodeListener(EVENT_TYPES.DECLINE_TRANSACTION, (transaction: Transaction<any>) => {
             this.transactionConfirmationService.unsubscribe(transaction.id);
         });
@@ -67,15 +76,15 @@ export class SocketListenerManager {
         );
     }
 
-    private addSystemServiceListeners(socket: ISocketClient) {
+    private addSystemServiceListeners(socket: ISocketClient<string>) {
         socket.addCodeListener(EVENT_TYPES.UPDATE_SYSTEM_INFO, this.systemService.onUpdateInfo);
     }
 
-    private addBlockchainServiceListeners(socket: ISocketClient) {
+    private addBlockchainServiceListeners(socket: ISocketClient<string>) {
         socket.addCodeListener(EVENT_TYPES.UPDATE_BLOCKCHAIN_INFO, this.blockchainService.onUpdateInfo);
     }
 
-    addListeners(socket: ISocketClient) {
+    addListeners(socket: ISocketClient<string>) {
         this.addWebhookServiceListeners(socket);
         this.addBlockServiceListeners(socket);
         this.addTransactionConfirmationServiceListeners(socket);
@@ -87,21 +96,23 @@ export class SocketListenerManager {
             block.transactions.forEach(transaction => {
                 if (this.transactionRepository.has(transaction.id)) {
                     this.transactionRepository.update(transaction);
-
-                    if (!this.blockRepository.has(block.id)) {
-                        this.blockRepository.add(block);
-                    }
+                } else {
+                    this.transactionRepository.add(transaction);
                 }
             });
         });
 
+        socket.addCodeListener(EVENT_TYPES.APPLY_BLOCK, (block: Block) => {
+            this.blockRepository.add(block);
+        });
+
+        socket.addCodeListener(EVENT_TYPES.UNDO_BLOCK, (block: Block) => {
+            this.blockRepository.remove(block.id);
+        });
+
         socket.addCodeListener(EVENT_TYPES.UNDO_BLOCK, (block: Block) => {
             block.transactions.forEach(transaction => {
-                if (this.transactionRepository.has(transaction.id)) {
-                    if (this.blockRepository.has(block.id)) {
-                        this.blockRepository.add(block);
-                    }
-                }
+                this.transactionRepository.remove(transaction.id);
             });
         });
     }
