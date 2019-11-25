@@ -79,8 +79,6 @@ export class TransactionConfirmationService implements IConfirmationsService<str
 
         const notifiedIds: Array<string> = [];
 
-        console.log('onApplyBlock', this.listeners.entries());
-
         for (const [id, listeners] of this.listeners.entries()) {
             const transaction = this.transactionRepository.get(id);
             if (!transaction || !transaction.blockId) {
