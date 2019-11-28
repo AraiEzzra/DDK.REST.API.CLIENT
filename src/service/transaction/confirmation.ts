@@ -8,12 +8,12 @@ import { TransactionRepository } from 'src/repository/transaction';
 import { IBlockService } from 'src/service/block';
 
 export type TransactionConfirmationListener = {
-    transactionId: TransactionId,
-    url: string,
+    transactionId: TransactionId;
+    url: string;
 };
 
 type ConfirmationListener = {
-    unsubscribeTimeoutId: NodeJS.Timeout,
+    unsubscribeTimeoutId: NodeJS.Timeout;
 } & TransactionConfirmationListener;
 
 export interface IConfirmationsService<ID, T> {
@@ -21,7 +21,8 @@ export interface IConfirmationsService<ID, T> {
     unsubscribe(id: ID): void;
 }
 
-export class TransactionConfirmationService implements IConfirmationsService<string, ConfirmationListener> {
+export class TransactionConfirmationService
+    implements IConfirmationsService<string, ConfirmationListener> {
     private readonly transactionRepository: TransactionRepository;
     private readonly blockService: IBlockService;
     private readonly numberOfConfirmations: number;
@@ -46,7 +47,10 @@ export class TransactionConfirmationService implements IConfirmationsService<str
     }
 
     private notify(url: string, transaction: Transaction): Promise<Response> {
-        return fetch(url, { method: 'post', body: JSON.stringify(transaction) });
+        return fetch(url, {
+            method: 'post',
+            body: JSON.stringify(transaction),
+        });
     }
 
     subscribe(listener: TransactionConfirmationListener) {
@@ -59,23 +63,31 @@ export class TransactionConfirmationService implements IConfirmationsService<str
             this.listeners.set(listener.transactionId, []);
         }
 
-        this.listeners.get(listener.transactionId).push({ ...listener, unsubscribeTimeoutId });
+        this.listeners
+            .get(listener.transactionId)
+            .push({ ...listener, unsubscribeTimeoutId });
     }
 
     unsubscribe(id: string) {
-        this.listeners.get(id).forEach(listener => clearTimeout(listener.unsubscribeTimeoutId));
+        if (!this.listeners.has(id)) {
+            return;
+        }
+
+        this.listeners
+            .get(id)
+            .forEach(listener => clearTimeout(listener.unsubscribeTimeoutId));
         this.listeners.delete(id);
     }
 
     async onApplyBlock(block: Block) {
-        const listenedTransactions = block.transactions
-            .filter(transaction => this.listeners.has(transaction.id));
+        const listenedTransactions = block.transactions.filter(transaction =>
+            this.listeners.has(transaction.id),
+        );
 
         if (listenedTransactions.length) {
             listenedTransactions.forEach(this.transactionRepository.add);
             this.blockService.add(block);
         }
-
 
         const notifiedIds: Array<string> = [];
 
@@ -85,18 +97,25 @@ export class TransactionConfirmationService implements IConfirmationsService<str
                 return;
             }
 
-            const transactionBlock = await this.blockService.get(transaction.blockId);
+            const transactionBlock = await this.blockService.get(
+                transaction.blockId,
+            );
             if (!transactionBlock) {
                 return;
             }
 
-            if (transactionBlock.height + this.numberOfConfirmations > block.height) {
+            if (
+                transactionBlock.height + this.numberOfConfirmations >
+                block.height
+            ) {
                 return;
             }
 
             transaction.confirmations = block.height - transactionBlock.height;
 
-            listeners.forEach(listener => this.notify(listener.url, transaction));
+            listeners.forEach(listener =>
+                this.notify(listener.url, transaction),
+            );
 
             notifiedIds.push(id);
         }
