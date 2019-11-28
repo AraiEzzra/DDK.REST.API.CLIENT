@@ -16,7 +16,7 @@ import { WebhookService, WebhookAction } from 'src/service/webhook';
 import { configureWebhooks } from 'src/service/configurator';
 import { TransactionConfirmationService } from 'src/service/transaction/confirmation';
 import { NUMBER_OF_CONFIRMATIONS, NODE_HOSTS } from 'src/config';
-import { TransactionService } from 'src/service/transaction';
+import { TransactionCreator } from 'src/service/transaction/creator';
 import { SystemService } from 'src/service/system';
 import { initSocketIOClient } from 'src/service/socket';
 import { SocketIOClient } from 'src/shared/socketIOClient';
@@ -25,21 +25,30 @@ import { Node } from 'src/model/node';
 import { SocketListenerManager } from 'src/service/socketListenerManager';
 import { nodeComparator } from 'src/util/comparator/node';
 
-export const blockService = new BlockService(blockRepository);
 export const blockchainService = new BlockchainService(blockchainRepository);
 export const systemService = new SystemService(systemRepository);
 export const accountService = new AccountService();
 export const webhookService = new WebhookService<WebhookAction | EVENT_TYPES>();
-export const transactionConfirmationService = new TransactionConfirmationService(
-    transactionRepository,
-    blockRepository,
-    NUMBER_OF_CONFIRMATIONS,
-);
-export const transactionService = new TransactionService(
+export const transactionService = new TransactionCreator(
     slotService,
     timeService,
     accountService,
 );
+
+const nodes = NODE_HOSTS
+    .map(host => initSocketIOClient(host.ip, host.port))
+    .map(socket => new SocketIOClient<API_ACTION_TYPES | EVENT_TYPES>(socket))
+    .map(socket => new Node(socket));
+
+export const nodePool = new NodePool(nodes, nodeComparator);
+
+export const blockService = new BlockService(blockRepository, nodePool);
+export const transactionConfirmationService = new TransactionConfirmationService(
+    transactionRepository,
+    blockService,
+    NUMBER_OF_CONFIRMATIONS,
+);
+
 export const socketListenerManager = new SocketListenerManager(
     systemService,
     blockchainService,
@@ -48,12 +57,7 @@ export const socketListenerManager = new SocketListenerManager(
     webhookService,
     transactionRepository,
     blockRepository,
+    nodePool,
 );
-
-const nodes = NODE_HOSTS
-    .map(host => initSocketIOClient(host.ip, host.port))
-    .map(socket => new SocketIOClient<API_ACTION_TYPES | EVENT_TYPES>(socket))
-    .map(socket => new Node(socket));
-export const nodePool = new NodePool(nodes, nodeComparator, socketListenerManager);
 
 configureWebhooks(webhookService);

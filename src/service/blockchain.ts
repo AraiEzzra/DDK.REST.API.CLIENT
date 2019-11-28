@@ -11,9 +11,11 @@ export class BlockchainService {
         this.repository = blockchainRepository;
 
         // TODO: fetch blockchain info when API will be added to core
+
+        this.onUpdateInfo = this.onUpdateInfo.bind(this);
     }
 
-    onUpdateInfo = (info: BlockchainInfoSchema): void => {
+    onUpdateInfo(info: BlockchainInfoSchema): void {
         this.repository.updateInfo(info);
     }
 }

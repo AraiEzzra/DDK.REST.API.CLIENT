@@ -1,82 +1,125 @@
-import fetch from 'node-fetch';
+import fetch, { Response } from 'node-fetch';
+import { setTimeout, clearTimeout } from 'timers';
 import { Block } from 'ddk.registry/dist/model/common/block';
 import { TransactionId } from 'ddk.registry/dist/model/common/type';
+import { Transaction } from 'ddk.registry/dist/model/common/transaction';
 
 import { TransactionRepository } from 'src/repository/transaction';
-import { BlockRepository } from 'src/repository/block';
+import { IBlockService } from 'src/service/block';
 
 export type TransactionConfirmationListener = {
-    transactionId: TransactionId,
-    url: string,
+    transactionId: TransactionId;
+    url: string;
 };
 
-export class TransactionConfirmationService {
+type ConfirmationListener = {
+    unsubscribeTimeoutId: NodeJS.Timeout;
+} & TransactionConfirmationListener;
+
+export interface IConfirmationsService<ID, T> {
+    subscribe(data: T): void;
+    unsubscribe(id: ID): void;
+}
+
+export class TransactionConfirmationService
+    implements IConfirmationsService<string, ConfirmationListener> {
     private readonly transactionRepository: TransactionRepository;
-    private readonly blockRepository: BlockRepository;
+    private readonly blockService: IBlockService;
     private readonly numberOfConfirmations: number;
-    private readonly listeners: Array<TransactionConfirmationListener>;
+    private readonly listeners: Map<string, Array<ConfirmationListener>>;
+    private readonly unsubscribeTimeout: number;
 
     constructor(
         transactionRepository: TransactionRepository,
-        blockRepository: BlockRepository,
+        blockService: IBlockService,
         numberOfConfirmations: number,
+        unsubscribeTimeout: number = 86400000,
     ) {
         this.numberOfConfirmations = numberOfConfirmations;
         this.transactionRepository = transactionRepository;
-        this.blockRepository = blockRepository;
-        this.listeners = [];
+        this.blockService = blockService;
+        this.unsubscribeTimeout = unsubscribeTimeout;
+
+        this.listeners = new Map();
 
         this.unsubscribe = this.unsubscribe.bind(this);
         this.onApplyBlock = this.onApplyBlock.bind(this);
     }
 
-    subscribe(data: TransactionConfirmationListener) {
-        this.listeners.push(data);
+    private notify(url: string, transaction: Transaction): Promise<Response> {
+        return fetch(url, {
+            method: 'post',
+            body: JSON.stringify(transaction),
+        });
     }
 
-    unsubscribe(transactionId: string) {
-        const index = this.listeners.findIndex(listener => listener.transactionId === transactionId);
-        if (index === -1) {
+    subscribe(listener: TransactionConfirmationListener) {
+        const unsubscribeTimeoutId = setTimeout(
+            () => this.unsubscribe(listener.transactionId),
+            this.unsubscribeTimeout,
+        );
+
+        if (!this.listeners.has(listener.transactionId)) {
+            this.listeners.set(listener.transactionId, []);
+        }
+
+        this.listeners
+            .get(listener.transactionId)
+            .push({ ...listener, unsubscribeTimeoutId });
+    }
+
+    unsubscribe(id: string) {
+        if (!this.listeners.has(id)) {
             return;
         }
 
-        this.listeners.splice(index, 1);
+        this.listeners
+            .get(id)
+            .forEach(listener => clearTimeout(listener.unsubscribeTimeoutId));
+        this.listeners.delete(id);
     }
 
-    onApplyBlock(block: Block) {
-        const notifiedTransactionIds: Array<TransactionId> = [];
+    async onApplyBlock(block: Block) {
+        const listenedTransactions = block.transactions.filter(transaction =>
+            this.listeners.has(transaction.id),
+        );
 
-        this.listeners.forEach(listener => {
-            const transaction = this.transactionRepository.get(listener.transactionId);
-            if (!transaction) {
-                console.error(`[DDK][RestAPI][TransactionConfirmationService][onApplyBlock] ` +
-                    `The listening transaction is missing in transaction repository`);
+        if (listenedTransactions.length) {
+            listenedTransactions.forEach(this.transactionRepository.add);
+            this.blockService.add(block);
+        }
+
+        const notifiedIds: Array<string> = [];
+
+        for (const [id, listeners] of this.listeners.entries()) {
+            const transaction = this.transactionRepository.get(id);
+            if (!transaction || !transaction.blockId) {
                 return;
             }
 
-            if (!transaction.blockId) {
-                // The transaction is not applied yet
-                return;
-            }
-
-            const transactionBlock = this.blockRepository.get(transaction.blockId);
+            const transactionBlock = await this.blockService.get(
+                transaction.blockId,
+            );
             if (!transactionBlock) {
-                console.error(`[DDK][RestAPI][TransactionConfirmationService][onApplyBlock] ` +
-                    `Listening transaction block is missing in transaction repository`);
                 return;
             }
 
-            if (transactionBlock.height + this.numberOfConfirmations > block.height) {
+            if (
+                transactionBlock.height + this.numberOfConfirmations >
+                block.height
+            ) {
                 return;
             }
 
             transaction.confirmations = block.height - transactionBlock.height;
 
-            fetch(listener.url, { method: 'post', body: JSON.stringify(transaction) });
+            listeners.forEach(listener =>
+                this.notify(listener.url, transaction),
+            );
 
-            notifiedTransactionIds.push(listener.transactionId);
-        });
+            notifiedIds.push(id);
+        }
 
-        notifiedTransactionIds.forEach(this.unsubscribe);
+        notifiedIds.forEach(this.unsubscribe);
     }
 }

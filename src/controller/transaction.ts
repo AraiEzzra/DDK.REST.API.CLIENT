@@ -8,24 +8,35 @@ import { nodePool } from 'src/service';
 import { validate } from 'src/util/validate';
 import { transactionService } from 'src/service';
 import { transactionRepository } from 'src/repository';
+import { HTTP_STATUS } from 'src/util/http';
 
 export class TransactionController {
     @validate
-    async getById(req: Request, res: Response): Promise<void> {
-        const response = await nodePool
-            .send<{ id: string }, Transaction<any>>(API_ACTION_TYPES.GET_TRANSACTION, req.params);
+    async getById(req: Request, res: Response): Promise<Response> {
+        const response = await nodePool.send<{ id: string }, Transaction<any>>(
+            API_ACTION_TYPES.GET_TRANSACTION,
+            req.params,
+        );
 
-        res.send(response);
+        if (!response.success) {
+            return res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).send(response);
+        }
+
+        if (!response.data) {
+            return res.status(HTTP_STATUS.NOT_FOUND).send(response);
+        }
+
+        return res.send(response);
     }
 
     @validate
-    async getMany(req: Request, res: Response): Promise<void> {
+    async getMany(req: Request, res: Response): Promise<Response> {
         const response = await nodePool.send(
             API_ACTION_TYPES.GET_TRANSACTIONS,
             req.body,
         );
 
-        res.send(response);
+        return res.send(response);
     }
 
     @validate
@@ -35,14 +46,19 @@ export class TransactionController {
             asset: req.body.transaction.asset,
         };
 
-        const transactionResponse = await transactionService
-            .create(transactionData, req.body.secret, req.body.secondSecret);
+        const transactionResponse = await transactionService.create(
+            transactionData,
+            req.body.secret,
+            req.body.secondSecret,
+        );
 
         if (!transactionResponse.success) {
             return transactionResponse;
         }
 
-        const serializedTransaction = transactionSerializer.serialize(transactionResponse.data);
+        const serializedTransaction = transactionSerializer.serialize(
+            transactionResponse.data,
+        );
         const response = await nodePool.send(
             API_ACTION_TYPES.CREATE_PREPARED_TRANSACTION,
             serializedTransaction,

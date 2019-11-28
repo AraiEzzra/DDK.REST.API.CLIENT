@@ -11,9 +11,11 @@ export class SystemService {
         this.repository = systemRepository;
 
         // TODO: fetch system info when API will be added to core
+
+        this.onUpdateInfo = this.onUpdateInfo.bind(this);
     }
 
-    onUpdateInfo = (info: SystemInfoSchema): void => {
+    onUpdateInfo(info: SystemInfoSchema): void {
         this.repository.updateInfo(info);
     }
 }

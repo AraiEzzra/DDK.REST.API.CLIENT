@@ -22,7 +22,7 @@ interface TimeService {
     getTime(): Promise<number>;
 }
 
-export class TransactionService {
+export class TransactionCreator {
     private readonly slotService: SlotService;
     private readonly timeService: TimeService;
     private readonly accountService: AccountService;
