@@ -34,7 +34,10 @@ export class Emitter<EVENT> implements IEmitter<EVENT> {
 
     removeListener(event: EVENT, fn: Function): this {
         if (this.listeners.has(event)) {
-            this.listeners.get(event).filter(f => f !== fn);
+            this.listeners.set(
+                event,
+                this.listeners.get(event).filter(f => f !== fn),
+            );
         }
 
         return this;
