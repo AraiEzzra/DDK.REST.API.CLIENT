@@ -4,7 +4,7 @@ export interface IBaseEmitter<EVENT> {
 }
 
 export interface IEmitter<EVENT> extends IBaseEmitter<EVENT> {
-    removeListener(event: EVENT, fn?: Function): this;
+    removeListener(event: EVENT, fn: Function): this;
 }
 
 export class Emitter<EVENT> implements IEmitter<EVENT> {
