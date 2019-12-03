@@ -13,6 +13,7 @@ stop_containers:
     - ddk.rest.api.client.stage
   script:
     - cd docker
+    - cp example.env .env
     - sh update.sh
     - sh stop.sh
     
