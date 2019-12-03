@@ -1,14 +1,26 @@
 stages:
+  - stop_containers
   - build
   - test
   - upload
-
+  - start_containers
+  
+stop_containers:
+  stage: stop_containers
+  only:
+    - master
+  tags:
+    - ddk.rest.api.client.stage
+  script:
+    - sh /docker/stop.sh
+    
 build:
   stage: build
   only:
     - master
   tags:
     - ddk.rest.api.client
+    - ddk.rest.api.client.stage
   script:
     - sh build.sh
 
@@ -18,6 +30,7 @@ test:
     - master
   tags:
     - ddk.rest.api.client
+    - ddk.rest.api.client.stage
   script:
     - cd docker
     - sh test.sh
@@ -28,8 +41,18 @@ upload:
     - master
   tags:
     - ddk.rest.api.client
+    - ddk.rest.api.client.stage
   script:
     - sh /root/DDK.Delegat.Install.Environment/DDK.REST.API.UPLOAD.IMAGE.sh
     - echo "Removing Docker images..."
     - sh docker/remove_images.sh
   when: manual
+
+start_containers:
+  stage: start_containers
+  only:
+    - master
+  tags:
+    - ddk.rest.api.client.stage
+  script:
+    - sh /docker/start.sh
