@@ -12,6 +12,7 @@ stop_containers:
   tags:
     - ddk.rest.api.client.stage
   script:
+    - sh /docker/update.sh
     - sh /docker/stop.sh
     
 build:
@@ -20,7 +21,6 @@ build:
     - master
   tags:
     - ddk.rest.api.client
-    - ddk.rest.api.client.stage
   script:
     - sh build.sh
 
@@ -30,7 +30,6 @@ test:
     - master
   tags:
     - ddk.rest.api.client
-    - ddk.rest.api.client.stage
   script:
     - cd docker
     - sh test.sh
