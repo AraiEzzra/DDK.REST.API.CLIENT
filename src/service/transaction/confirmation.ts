@@ -79,16 +79,7 @@ export class TransactionConfirmationService
         this.listeners.delete(id);
     }
 
-    async onApplyBlock(block: Block) {
-        const listenedTransactions = block.transactions.filter(transaction =>
-            this.listeners.has(transaction.id),
-        );
-
-        if (listenedTransactions.length) {
-            listenedTransactions.forEach(this.transactionRepository.add);
-            this.blockService.add(block);
-        }
-
+    async onApplyBlock(block: Block): Promise<void> {
         const notifiedIds: Array<string> = [];
 
         for (const [id, listeners] of this.listeners.entries()) {
