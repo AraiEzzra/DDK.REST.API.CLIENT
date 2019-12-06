@@ -1,5 +1,4 @@
 import { EVENT_TYPES } from 'ddk.registry/dist/model/transport/event';
-import { Transaction } from 'ddk.registry/dist/model/common/transaction';
 import { Block } from 'ddk.registry/dist/model/common/block';
 
 import { WebhookAction, WebhookService } from 'src/service/webhook';
@@ -12,13 +11,16 @@ import { TransactionRepository } from 'src/repository/transaction';
 import { BlockRepository } from 'src/repository/block';
 import { NodePool, NodePoolAction } from 'src/service/nodePool';
 import { Node } from 'src/model/node';
+import { Transaction } from 'ddk.registry/dist/model/common/transaction';
+
+type Action = WebhookAction | EVENT_TYPES;
 
 export class SocketListenerManager {
     private readonly systemService: SystemService;
     private readonly blockchainService: BlockchainService;
     private readonly blockService: BlockService;
     private readonly transactionConfirmationService: TransactionConfirmationService;
-    private readonly webhookService: WebhookService<WebhookAction | EVENT_TYPES>;
+    private readonly webhookService: WebhookService<Action>;
     private readonly transactionRepository: TransactionRepository;
     private readonly blockRepository: BlockRepository;
 
@@ -48,40 +50,55 @@ export class SocketListenerManager {
     }
 
     private addWebhookServiceListeners(socket: ISocketClient<string>) {
-        socket.addCodeListener(EVENT_TYPES.DECLINE_TRANSACTION, (transaction: Transaction<any>) => {
-            this.webhookService.on(EVENT_TYPES.DECLINE_TRANSACTION, transaction);
-        });
+        socket.addCodeListener(
+            EVENT_TYPES.DECLINE_TRANSACTION,
+            (transaction: Transaction) => {
+                this.webhookService.on(
+                    EVENT_TYPES.DECLINE_TRANSACTION,
+                    transaction,
+                );
+            },
+        );
 
         socket.addCodeListener(EVENT_TYPES.APPLY_BLOCK, (block: Block) => {
             this.webhookService.on(EVENT_TYPES.APPLY_BLOCK, block);
 
             block.transactions.forEach(transaction => {
-                this.webhookService.on(WebhookAction.APPLY_TRANSACTION, transaction);
+                this.webhookService.on(
+                    WebhookAction.APPLY_TRANSACTION,
+                    transaction,
+                );
             });
         });
     }
 
     private addBlockServiceListeners(socket: ISocketClient<string>) {
-        socket.addCodeListener(EVENT_TYPES.APPLY_BLOCK, this.blockService.onApplyBlock);
-    }
-
-    private addTransactionConfirmationServiceListeners(socket: ISocketClient<string>) {
-        socket.addCodeListener(EVENT_TYPES.DECLINE_TRANSACTION, (transaction: Transaction<any>) => {
-            this.transactionConfirmationService.unsubscribe(transaction.id);
-        });
-
         socket.addCodeListener(
             EVENT_TYPES.APPLY_BLOCK,
-            (block: Block) => this.transactionConfirmationService.onApplyBlock(block),
+            this.blockService.onApplyBlock,
+        );
+    }
+
+    private addTransactionConfirmationServiceListeners(
+        socket: ISocketClient<string>,
+    ) {
+        socket.addCodeListener(EVENT_TYPES.APPLY_BLOCK, (block: Block) =>
+            this.transactionConfirmationService.onApplyBlock(block),
         );
     }
 
     private addSystemServiceListeners(socket: ISocketClient<string>) {
-        socket.addCodeListener(EVENT_TYPES.UPDATE_SYSTEM_INFO, this.systemService.onUpdateInfo);
+        socket.addCodeListener(
+            EVENT_TYPES.UPDATE_SYSTEM_INFO,
+            this.systemService.onUpdateInfo,
+        );
     }
 
     private addBlockchainServiceListeners(socket: ISocketClient<string>) {
-        socket.addCodeListener(EVENT_TYPES.UPDATE_BLOCKCHAIN_INFO, this.blockchainService.onUpdateInfo);
+        socket.addCodeListener(
+            EVENT_TYPES.UPDATE_BLOCKCHAIN_INFO,
+            this.blockchainService.onUpdateInfo,
+        );
     }
 
     addListeners(socket: ISocketClient<string>) {

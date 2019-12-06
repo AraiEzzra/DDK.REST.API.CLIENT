@@ -15,12 +15,10 @@ export class NodePool extends Emitter<NodePoolAction> {
     private readonly nodes: Array<Node>;
     private readonly nodeComparator: Comparator<Node>;
     private readonly nodeSwitchHeightThreshold: number = 3;
+    private readonly initialPickTimeout: number = 3000;
     private primary: Node;
 
-    constructor(
-        nodes: Array<Node>,
-        nodeComparator: Comparator<Node>,
-    ) {
+    constructor(nodes: Array<Node>, nodeComparator: Comparator<Node>) {
         super();
 
         this.nodes = nodes;
@@ -37,7 +35,10 @@ export class NodePool extends Emitter<NodePoolAction> {
             return;
         }
 
-        if (this.primary.height + this.nodeSwitchHeightThreshold <= block.height) {
+        if (
+            this.primary.height + this.nodeSwitchHeightThreshold <=
+            block.height
+        ) {
             this.repickPrimary();
         }
     }
@@ -51,34 +52,63 @@ export class NodePool extends Emitter<NodePoolAction> {
     }
 
     private init() {
-        this.nodes.forEach(node => node.socket.on('disconnect', (_reason: string) => {
-            this.onDisconnect(node);
-        }));
+        this.nodes.forEach(node =>
+            node.socket.on('disconnect', (_reason: string) => {
+                this.onDisconnect(node);
+            }),
+        );
 
-        this.nodes.forEach(node => node.socket.on('connect_timeout', (_timeout: number) => {
-            this.onDisconnect(node);
-        }));
+        this.nodes.forEach(node =>
+            node.socket.on('connect_timeout', (_timeout: number) => {
+                this.onDisconnect(node);
+            }),
+        );
 
         this.nodes.forEach(node => {
-            node.socket.addCodeListener(EVENT_TYPES.APPLY_BLOCK, this.onApplyBlock);
+            node.socket.addCodeListener(
+                EVENT_TYPES.APPLY_BLOCK,
+                this.onApplyBlock,
+            );
 
             // TODO: fix removing listeners
             node.socket.on('reconnect', () => {
-                node.socket.addCodeListener(EVENT_TYPES.APPLY_BLOCK, this.onApplyBlock);
+                node.socket.addCodeListener(
+                    EVENT_TYPES.APPLY_BLOCK,
+                    this.onApplyBlock,
+                );
             });
         });
+
+        setTimeout(() => {
+            if (!this.primary) {
+                this.repickPrimary();
+            }
+        }, this.initialPickTimeout);
     }
 
-    async send<Data, Response>(code: API_ACTION_TYPES | EVENT_TYPES, data: Data): Promise<ResponseEntity<Response>> {
+    async send<Data, Response>(
+        code: API_ACTION_TYPES | EVENT_TYPES,
+        data: Data,
+    ): Promise<ResponseEntity<Response>> {
         if (!this.nodes.filter(node => node.socket.isConnected).length) {
-            return new ResponseEntity({ errors: ['All nodes are disconnected. Please try again later.'] });
+            return new ResponseEntity({
+                errors: ['All nodes are disconnected. Please try again later.'],
+            });
         } else if (!this.primary) {
             console.log(`[NodePool][send] Primary node is missing. Repick`);
             this.repickPrimary();
         }
 
-        const response = await this.primary.socket.send<Data, Response>(code, data);
-        if (!response.success && response.errors.filter(error => error.toLowerCase().includes('timeout')).length) {
+        const response = await this.primary.socket.send<Data, Response>(
+            code,
+            data,
+        );
+        if (
+            !response.success &&
+            response.errors.filter(error =>
+                error.toLowerCase().includes('timeout'),
+            ).length
+        ) {
             // TODO: ban this node or decrease priority
             // https://trello.com/c/zRAMcjpv/52-add-ban-logic-for-slow-nodes
             this.repickPrimary();
@@ -92,7 +122,9 @@ export class NodePool extends Emitter<NodePoolAction> {
         if (this.primary && this.nodes.length === 1) {
             return;
         } else if (!this.nodes.filter(node => node.socket.isConnected).length) {
-            console.log(`[NodePool][repickPrimary] Skip, no active connections`);
+            console.log(
+                `[NodePool][repickPrimary] Skip, no active connections`,
+            );
             this.primary = undefined;
             return;
         } else if (this.primary) {
@@ -102,7 +134,9 @@ export class NodePool extends Emitter<NodePoolAction> {
         this.nodes.sort(this.nodeComparator.compare);
         this.primary = this.nodes[0];
 
-        console.log(`[NodePool][repickPrimary] Primary node changed to ${this.primary.socket.uri}`);
+        console.log(
+            `[NodePool][repickPrimary] Primary node changed to ${this.primary.socket.uri}`,
+        );
 
         this.emit(NodePoolAction.repick, this.primary);
     }
