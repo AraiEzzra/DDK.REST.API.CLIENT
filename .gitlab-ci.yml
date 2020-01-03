@@ -59,3 +59,4 @@ start_containers:
     - cd docker
     - cp example.env .env
     - sh start.sh
+  when: manual
