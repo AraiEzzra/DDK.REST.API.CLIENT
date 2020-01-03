@@ -8,10 +8,12 @@ export class SocketIOClient<ActionTypes> extends SocketClient<SocketIOClient.Soc
         super(socket, event, timeout);
 
         // clear message buffer after reconnect
-        socket.on('connect', () => {
+        const clearSendBufferCallback = () => {
             // @ts-ignore
             socket.sendBuffer = [];
-        });
+        };
+        socket.on('connect', clearSendBufferCallback);
+        socket.on('reconnect', clearSendBufferCallback);
     }
 
     send<D, R>(code: ActionTypes, data: D): Promise<ResponseEntity<R>> {
