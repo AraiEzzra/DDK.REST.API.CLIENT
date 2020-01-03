@@ -4,12 +4,24 @@ import Message, { MessageType } from 'ddk.registry/dist/model/transport/message'
 import { SocketClient } from 'src/shared/socket';
 
 export class SocketIOClient<ActionTypes> extends SocketClient<SocketIOClient.Socket, ActionTypes> {
+    constructor(socket: SocketIOClient.Socket, event?: string, timeout?: number) {
+        super(socket, event, timeout);
+
+        // clear message buffer after reconnect
+        const clearSendBufferCallback = () => {
+            // @ts-ignore
+            socket.sendBuffer = [];
+        };
+        socket.on('connect', clearSendBufferCallback);
+        socket.on('reconnect', clearSendBufferCallback);
+    }
+
     send<D, R>(code: ActionTypes, data: D): Promise<ResponseEntity<R>> {
         const message = new Message(MessageType.REQUEST, code, data);
 
         this.socket.emit(this.event, message);
 
-        return new Promise((resolve) => {
+        return new Promise(resolve => {
             const timeoutId = setTimeout(() => {
                 this.messageListeners.delete(message.headers.id);
                 resolve(new ResponseEntity({ errors: ['Socket timeout'] }));
