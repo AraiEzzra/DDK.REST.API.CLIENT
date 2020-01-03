@@ -9,5 +9,6 @@ export const initSocketIOClient = (ip: string, port: number): SocketIOClient.Soc
 
     return io(`${protocol}://${ip}:${port}`, {
         timeout: 2000,
+        transports: ['websocket'],
     });
 };
