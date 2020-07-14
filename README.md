@@ -21,7 +21,7 @@
 6. [Webhook](docs/api/webhook.md)
 7. [System](docs/api/system.md)
 8. [Blockchain](docs/api/blockchain.md)
-9. [Delegates](doc/api/delegate.md)
+9. [Delegates](docs/api/delegate.md)
 
 ## Models
 
